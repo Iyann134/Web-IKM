@@ -11,6 +11,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -21,8 +25,23 @@ body {
   background: #fff8f5;
 }
 
-* {
-  box-sizing: border-box;
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
 }
 
 .bg-minang {
@@ -54,21 +73,18 @@ body {
   }
 }
 
-button,
-a {
-  font: inherit;
+.card-smooth {
+  border-radius: 2rem;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 60px -30px rgba(15, 23, 42, 0.18);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #1f1414;
-  margin: 0;
+.lead-text {
+  color: rgba(31, 20, 20, 0.9);
 }
 
-p {
-  margin: 0;
+.page-section {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
 }

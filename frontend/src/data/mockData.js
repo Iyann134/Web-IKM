@@ -1,40 +1,21 @@
 export const announcementTexts = [
-  'Selamat datang di IKM ITERA! Temukan acara budaya, prestasi, dan berita terbaru.',
-  'Pendaftaran pengurus baru dibuka. Segera bergabung dan tunjukkan semangat Minangkabau!',
-  'Ikuti kegiatan paguyuban, pelatihan, dan bakti sosial sepanjang tahun.'
+  'Selamat datang Maba ITERA 2026! Siapkan diri untuk pengalaman budaya dan persaudaraan.',
+  'Pengajuan kegiatan budaya Minangkabau sudah dibuka — ajukan ide terbaikmu hari ini.',
+  'Jadilah bagian dari komunitas yang menjaga tradisi dan mendukung prestasi mahasiswa.'
 ]
 
 export const features = [
   {
     title: 'Paguyuban',
-    description: 'Saling berbagi, memperkuat ikatan keluarga Minangkabau di kampus.'
+    description: 'Memperkuat silaturahmi, dukungan sosial, dan identitas komunitas Minangkabau.'
   },
   {
-    title: 'Budaya',
-    description: 'Menggali nilai adat, seni, dan tradisi Minangkabau secara modern.'
+    title: 'Pendidikan',
+    description: 'Menyediakan kelas, seminar, dan pelatihan untuk pengembangan akademis dan keterampilan.'
   },
   {
-    title: 'Aspirasi',
-    description: 'Menjadi ruang bagi mahasiswa untuk bersuara dan berkarya.'
-  }
-]
-
-export const activities = [
-  {
-    title: 'Festival Randai',
-    category: 'Budaya',
-    description: 'Pertunjukan seni tradisional dengan tema kebersamaan generasi muda.'
-    
-  },
-  {
-    title: 'Pelatihan Kepemimpinan',
-    category: 'Paguyuban',
-    description: 'Workshop penguatan kompetensi organisasi dan komunikasi publik.'
-  },
-  {
-    title: 'Aksi Sosial Merantau',
-    category: 'Aspirasi',
-    description: 'Program bakti sosial untuk masyarakat sekitar dan alumni.'
+    title: 'Pengabdian',
+    description: 'Melakukan aksi sosial, bakti kampus, dan kontribusi positif pada masyarakat sekitar.'
   }
 ]
 
@@ -90,4 +71,4 @@ export const pengurus = {
     { name: 'Departemen Pengembangan SDM', lead: 'Andi Saputra' },
     { name: 'Departemen Komunikasi & Publikasi', lead: 'Rina Oktaviani' }
   ]
-]
+}

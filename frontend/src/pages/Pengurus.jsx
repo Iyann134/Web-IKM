@@ -1,47 +1,84 @@
-import { pengurus } from '../data/mockData'
+import { useEffect, useState } from 'react'
+import { fetchPengurus } from '../services/api'
 
 export default function Pengurus() {
+  const [pengurus, setPengurus] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    fetchPengurus()
+      .then((data) => {
+        setPengurus(data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        setError(err.message)
+        setLoading(false)
+      })
+  }, [])
+
+  const dosenPembina = pengurus.find((member) => member.role === 'Dosen Pembina')
+  const bphMembers = pengurus.filter((member) => member.role !== 'Dosen Pembina' && member.role !== 'Departemen')
+  const departments = pengurus.filter((member) => member.role === 'Departemen')
+
   return (
-    <section className="bg-[#fff4f1] py-16 px-6 text-[#1e1515]">
-      <div className="mx-auto max-w-6xl space-y-12">
-        <div>
-          <h2 className="text-3xl font-bold text-[#8b0000]">Struktur Organisasi</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-700">Menampilkan hierarki pengurus IKM ITERA mulai dari pembina hingga departemen kerja.</p>
+    <section className="bg-[#fff7f2] py-16 px-6 text-[#1f1414]">
+      <div className="mx-auto max-w-7xl space-y-12">
+        <div className="text-center">
+          <p className="text-sm uppercase tracking-[0.35em] text-[#8b0000]/90">Struktur Organisasi</p>
+          <h2 className="mt-4 text-4xl font-bold text-[#8b0000]">Pengurus IKM ITERA</h2>
+          <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-slate-700">
+            Menampilkan hirarki kepengurusan yang rapi dan transparan — dari pembina hingga departemen kerja.
+          </p>
         </div>
 
-        <div className="space-y-8">
-          <div className="rounded-3xl border border-[#8b0000]/15 bg-white p-8 shadow-lg shadow-black/5">
-            <h3 className="text-2xl font-semibold text-[#8b0000]">Dosen Pembina</h3>
-            <div className="mt-5 rounded-3xl bg-[#fde8e5] p-6">
-              <p className="text-lg font-semibold">{pengurus.dosenPembina.name}</p>
-              <p className="mt-2 text-sm text-slate-600">{pengurus.dosenPembina.title}</p>
-            </div>
+        {loading ? (
+          <div className="rounded-[2rem] border border-[#8b0000]/10 bg-white p-10 text-center text-[#8b0000] shadow-[0_30px_70px_-40px_rgba(0,0,0,0.20)]">
+            Memuat data pengurus...
           </div>
+        ) : error ? (
+          <div className="rounded-[2rem] border border-red-300 bg-red-50 p-10 text-center text-red-700 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.10)]">
+            Terjadi kesalahan: {error}
+          </div>
+        ) : (
+          <div className="rounded-[2rem] border border-[#8b0000]/10 bg-white p-10 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.20)]">
+            <div className="mx-auto max-w-3xl rounded-[2rem] border border-[#8b0000]/15 bg-[#fff2ef] p-8 text-center shadow-sm">
+              <p className="text-sm uppercase tracking-[0.35em] text-[#8b0000]/90">Dosen Pembina</p>
+              <h3 className="mt-4 text-3xl font-semibold text-[#8b0000]">{dosenPembina?.name || 'Belum tersedia'}</h3>
+              <p className="mt-2 text-sm text-slate-700">{dosenPembina?.description || 'Deskripsi belum tersedia.'}</p>
+            </div>
 
-          <div className="rounded-3xl border border-[#8b0000]/15 bg-white p-8 shadow-lg shadow-black/5">
-            <h3 className="text-2xl font-semibold text-[#8b0000]">BPH</h3>
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {pengurus.bph.map((member) => (
-                <div key={member.name} className="rounded-3xl border border-slate-200 bg-[#fff2ef] p-5">
-                  <p className="font-semibold text-[#8b0000]">{member.name}</p>
-                  <p className="mt-2 text-sm text-slate-600">{member.role}</p>
+            <div className="mt-12 space-y-10">
+              <div>
+                <p className="text-sm uppercase tracking-[0.35em] text-[#8b0000]/80">Badan Pengurus Harian</p>
+                <div className="mt-6 grid gap-6 md:grid-cols-2">
+                  {bphMembers.map((member) => (
+                    <div key={member.id} className="rounded-[1.75rem] border border-slate-200 bg-[#fff4ef] p-6 shadow-sm">
+                      <p className="text-lg font-semibold text-[#8b0000]">{member.name}</p>
+                      <p className="mt-2 text-sm text-slate-700">{member.role}</p>
+                      <p className="mt-3 text-sm text-slate-600">{member.description}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          <div className="rounded-3xl border border-[#8b0000]/15 bg-white p-8 shadow-lg shadow-black/5">
-            <h3 className="text-2xl font-semibold text-[#8b0000]">Departemen</h3>
-            <div className="mt-6 grid gap-4 md:grid-cols-3">
-              {pengurus.departemen.map((dept) => (
-                <div key={dept.name} className="rounded-3xl border border-slate-200 bg-[#fff2ef] p-5">
-                  <p className="font-semibold text-[#8b0000]">{dept.name}</p>
-                  <p className="mt-2 text-sm text-slate-600">Ketua: {dept.lead}</p>
+              {departments.length > 0 && (
+                <div>
+                  <p className="text-sm uppercase tracking-[0.35em] text-[#8b0000]/80">Departemen</p>
+                  <div className="mt-6 grid gap-6 md:grid-cols-3">
+                    {departments.map((dept) => (
+                      <div key={dept.id} className="rounded-[1.75rem] border border-slate-200 bg-[#fff4ef] p-6 shadow-sm">
+                        <p className="text-base font-semibold text-[#8b0000]">{dept.name}</p>
+                        <p className="mt-2 text-sm text-slate-700">{dept.description}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
+              )}
             </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   )
