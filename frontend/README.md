@@ -1,16 +1,50 @@
-# React + Vite
+# 💻 IKM ITERA Frontend (React SPA)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Direktori ini berisi kode sumber antarmuka pengguna (Frontend) untuk **Web Portal IKM ITERA**. Menggunakan React dengan Vite untuk proses build yang cepat, serta Tailwind CSS v4 sebagai kerangka kerja styling.
 
-Currently, two official plugins are available:
+## 🛠️ Tech Stack & Library
+- **React 19**
+- **Vite** (Build Tool & Dev Server)
+- **Tailwind CSS v4** (Utility-first styling)
+- **React Router DOM v7** (Routing)
+- **FontAwesome** (Ikonografi)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 📂 Struktur Direktori
+* `/src/components`: Komponen yang dapat digunakan kembali seperti `Layout.jsx` (Header, Footer, Navbar).
+* `/src/pages`:
+  - `Home.jsx` (Halaman utama dengan teks berjalan/running ticker pengumuman & kartu fitur).
+  - `Tentang.jsx` (Visi misi, makna logo, dan sejarah singkat).
+  - `Portal.jsx` (Menampilkan data dinamis prestasi dan berita yang diambil dari API).
+  - `Pengurus.jsx` (Bagan organisasi pengurus terstruktur).
+* `/src/services/api.js`: Konfigurasi klien API untuk mengambil data dari backend.
+* `/src/data/mockData.js`: Data statis untuk pengumuman dan fitur beranda.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🚀 Memulai Pengoperasian Lokal
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. **Instal Dependensi:**
+   ```bash
+   npm install
+   ```
+2. **Jalankan Server Development:**
+   ```bash
+   npm run dev
+   ```
+   Aplikasi akan dapat diakses secara lokal pada URL yang ditunjukkan di terminal (biasanya `http://localhost:5173`).
+
+3. **Build untuk Produksi:**
+   ```bash
+   npm run build
+   ```
+
+---
+
+## ⚙️ Variabel Lingkungan (Environment Variables)
+Secara default, aplikasi frontend mengarah ke server backend lokal di `http://localhost:5000/api`. Jika ingin mengubahnya (misalnya untuk kebutuhan deployment), buat berkas `.env` di direktori ini dan tambahkan variabel berikut:
+
+```env
+VITE_API_BASE_URL=https://nama-api-backend-anda.com/api
+```
