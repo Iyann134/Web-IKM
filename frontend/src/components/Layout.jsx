@@ -1,13 +1,16 @@
-import { useState } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import PageTransition from './PageTransition'
 import {
   faHome,
   faInfoCircle,
   faChartLine,
   faUsers,
   faBars,
-  faXmark
+  faXmark,
+  faLock,
+  faSignInAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 const navItems = [
@@ -19,6 +22,13 @@ const navItems = [
 
 export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const location = useLocation()
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('adminToken'))
+
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem('adminToken'))
+  }, [location])
+
 
   return (
     <div className="min-h-screen bg-[#fff8f5] text-[#1f1414]">
@@ -66,13 +76,46 @@ export default function Layout() {
                   {item.label}
                 </NavLink>
               ))}
+              {isLoggedIn ? (
+                <NavLink
+                  to="/admin/dashboard"
+                  onClick={() => setMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold border transition ${
+                      isActive
+                        ? 'bg-marawa-gradient text-white border-transparent'
+                        : 'border-[#8b0000]/20 text-[#8b0000] hover:bg-[#8b0000] hover:text-white hover:border-transparent'
+                    }`
+                  }
+                >
+                  <FontAwesomeIcon icon={faLock} />
+                  Dashboard Admin
+                </NavLink>
+              ) : (
+                <NavLink
+                  to="/admin/login"
+                  onClick={() => setMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold border transition ${
+                      isActive
+                        ? 'bg-marawa-gradient text-white border-transparent'
+                        : 'border-[#8b0000]/20 text-[#8b0000] hover:bg-[#8b0000] hover:text-white hover:border-transparent'
+                    }`
+                  }
+                >
+                  <FontAwesomeIcon icon={faSignInAlt} />
+                  Login Admin
+                </NavLink>
+              )}
             </div>
           </nav>
         </div>
       </header>
 
       <main className="flex-1 bg-[#fff8f5] py-8">
-        <Outlet />
+        <PageTransition key={location.pathname}>
+          <Outlet />
+        </PageTransition>
       </main>
 
       <footer className="border-t border-slate-200 bg-[#1f1414] text-white">
@@ -81,7 +124,13 @@ export default function Layout() {
             <p className="text-sm font-semibold">IKM ITERA</p>
             <p className="mt-2 text-xs text-slate-300">Menjaga tradisi, membangun masa depan.</p>
           </div>
-          <p className="text-xs text-slate-400">© {new Date().getFullYear()} IKM ITERA. All rights reserved.</p>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-slate-400">
+            <p>© {new Date().getFullYear()} IKM ITERA. All rights reserved.</p>
+            <span className="hidden sm:inline">•</span>
+            <NavLink to="/admin/login" className="hover:text-white transition font-medium">
+              Portal Admin
+            </NavLink>
+          </div>
         </div>
       </footer>
     </div>

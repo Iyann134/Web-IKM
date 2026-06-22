@@ -1,28 +1,149 @@
+import axios from 'axios'
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'
 
-export async function fetchPengurus() {
-  const response = await fetch(`${API_BASE_URL}/pengurus`)
-  if (!response.ok) {
-    throw new Error('Unable to fetch pengurus data')
+const api = axios.create({
+  baseURL: API_BASE_URL
+})
+
+// Helper to attach authorization header
+const authConfig = (token) => ({
+  headers: {
+    Authorization: `Bearer ${token}`
   }
-  const result = await response.json()
-  return result.data
+})
+
+// --- PUBLIC READ CLIENTS ---
+
+export async function fetchPengurus() {
+  try {
+    const response = await api.get('/pengurus')
+    return response.data.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal mengambil data pengurus.')
+  }
 }
 
 export async function fetchBerita() {
-  const response = await fetch(`${API_BASE_URL}/berita`)
-  if (!response.ok) {
-    throw new Error('Unable to fetch berita data')
+  try {
+    const response = await api.get('/berita')
+    return response.data.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal mengambil data berita.')
   }
-  const result = await response.json()
-  return result.data
 }
 
 export async function fetchPrestasi() {
-  const response = await fetch(`${API_BASE_URL}/prestasi`)
-  if (!response.ok) {
-    throw new Error('Unable to fetch prestasi data')
+  try {
+    const response = await api.get('/prestasi')
+    return response.data.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal mengambil data prestasi.')
   }
-  const result = await response.json()
-  return result.data
+}
+
+export async function fetchBeritaById(id) {
+  try {
+    const response = await api.get(`/berita/${id}`)
+    return response.data.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal mengambil detail berita.')
+  }
+}
+
+// --- ADMIN AUTH ---
+
+export async function loginAdmin(username, password) {
+  try {
+    const response = await api.post('/auth/login', { username, password })
+    return response.data // Contains token, admin info
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Login gagal. Periksa kembali username dan password Anda.')
+  }
+}
+
+// --- ADMIN CRUD CLIENTS ---
+
+// Pengurus CRUD
+export async function createPengurus(token, data) {
+  try {
+    const response = await api.post('/pengurus', data, authConfig(token))
+    return response.data.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal menambahkan pengurus.')
+  }
+}
+
+export async function updatePengurus(token, id, data) {
+  try {
+    const response = await api.put(`/pengurus/${id}`, data, authConfig(token))
+    return response.data.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal memperbarui pengurus.')
+  }
+}
+
+export async function deletePengurus(token, id) {
+  try {
+    const response = await api.delete(`/pengurus/${id}`, authConfig(token))
+    return response.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal menghapus pengurus.')
+  }
+}
+
+// Berita CRUD
+export async function createBerita(token, data) {
+  try {
+    const response = await api.post('/berita', data, authConfig(token))
+    return response.data.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal membuat berita.')
+  }
+}
+
+export async function updateBerita(token, id, data) {
+  try {
+    const response = await api.put(`/berita/${id}`, data, authConfig(token))
+    return response.data.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal memperbarui berita.')
+  }
+}
+
+export async function deleteBerita(token, id) {
+  try {
+    const response = await api.delete(`/berita/${id}`, authConfig(token))
+    return response.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal menghapus berita.')
+  }
+}
+
+// Prestasi CRUD
+export async function createPrestasi(token, data) {
+  try {
+    const response = await api.post('/prestasi', data, authConfig(token))
+    return response.data.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal menambahkan prestasi.')
+  }
+}
+
+export async function updatePrestasi(token, id, data) {
+  try {
+    const response = await api.put(`/prestasi/${id}`, data, authConfig(token))
+    return response.data.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal memperbarui prestasi.')
+  }
+}
+
+export async function deletePrestasi(token, id) {
+  try {
+    const response = await api.delete(`/prestasi/${id}`, authConfig(token))
+    return response.data
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal menghapus prestasi.')
+  }
 }

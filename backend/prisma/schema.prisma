@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Pengurus {
+  id          Int    @id @default(autoincrement())
+  role        String
+  name        String
+  description String
+}
+
+model Berita {
+  id      Int    @id @default(autoincrement())
+  title   String
+  date    String
+  content String
+  image   String
+}
+
+model Prestasi {
+  id          Int    @id @default(autoincrement())
+  title       String
+  year        Int
+  description String
+}

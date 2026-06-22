@@ -1,6 +1,48 @@
 import { useEffect, useState } from 'react'
 import { fetchPengurus } from '../services/api'
 
+function PengurusSkeleton() {
+  return (
+    <div className="rounded-[2rem] border border-[#8b0000]/10 bg-white p-10 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.20)] animate-pulse space-y-12">
+      {/* Pembina Skeleton */}
+      <div className="mx-auto max-w-3xl rounded-[2rem] border border-slate-100 bg-[#fffbf9] p-8 text-center space-y-4">
+        <div className="h-4 w-32 bg-slate-200 rounded-md mx-auto"></div>
+        <div className="h-8 w-64 bg-slate-200 rounded-md mx-auto"></div>
+        <div className="h-4 w-5/6 bg-slate-200 rounded-md mx-auto"></div>
+      </div>
+
+      <div className="space-y-10">
+        {/* BPH Skeleton */}
+        <div>
+          <div className="h-5 w-48 bg-slate-200 rounded-md mb-6"></div>
+          <div className="grid gap-6 md:grid-cols-2">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="rounded-[1.75rem] border border-slate-100 bg-[#fffbf9] p-6 space-y-3">
+                <div className="h-6 w-1/2 bg-slate-200 rounded-md"></div>
+                <div className="h-4 w-1/3 bg-slate-200 rounded-md"></div>
+                <div className="h-4 w-5/6 bg-slate-200 rounded-md"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Departemen Skeleton */}
+        <div>
+          <div className="h-5 w-32 bg-slate-200 rounded-md mb-6"></div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="rounded-[1.75rem] border border-slate-100 bg-[#fffbf9] p-6 space-y-3">
+                <div className="h-6 w-3/4 bg-slate-200 rounded-md"></div>
+                <div className="h-4 w-full bg-slate-200 rounded-md"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Pengurus() {
   const [pengurus, setPengurus] = useState([])
   const [loading, setLoading] = useState(true)
@@ -34,9 +76,7 @@ export default function Pengurus() {
         </div>
 
         {loading ? (
-          <div className="rounded-[2rem] border border-[#8b0000]/10 bg-white p-10 text-center text-[#8b0000] shadow-[0_30px_70px_-40px_rgba(0,0,0,0.20)]">
-            Memuat data pengurus...
-          </div>
+          <PengurusSkeleton />
         ) : error ? (
           <div className="rounded-[2rem] border border-red-300 bg-red-50 p-10 text-center text-red-700 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.10)]">
             Terjadi kesalahan: {error}
