@@ -62,6 +62,26 @@ export async function loginAdmin(username, password) {
   }
 }
 
+// --- ADMIN UPLOAD ---
+
+export async function uploadImage(token, file) {
+  try {
+    const formData = new FormData()
+    formData.append('image', file)
+
+    const response = await api.post('/upload', formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    return response.data.imageUrl
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Gagal mengunggah gambar.')
+  }
+}
+
+
 // --- ADMIN CRUD CLIENTS ---
 
 // Pengurus CRUD

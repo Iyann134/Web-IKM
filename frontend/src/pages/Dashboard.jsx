@@ -24,8 +24,10 @@ import {
   deleteBerita,
   createPrestasi,
   updatePrestasi,
-  deletePrestasi
+  deletePrestasi,
+  uploadImage
 } from '../services/api'
+
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -45,6 +47,11 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [currentId, setCurrentId] = useState(null)
+
+  // Upload States
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState(null)
+
 
   // Form Fields
   const [pengurusForm, setPengurusForm] = useState({ role: '', name: '', description: '' })
@@ -92,6 +99,24 @@ export default function Dashboard() {
   const showNotification = (msg) => {
     setSuccessMsg(msg)
     setTimeout(() => setSuccessMsg(''), 4000)
+  }
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    setUploading(true)
+    setUploadError(null)
+
+    try {
+      const imageUrl = await uploadImage(token, file)
+      setBeritaForm(prev => ({ ...prev, image: imageUrl }))
+      showNotification('Gambar berhasil diunggah.')
+    } catch (err) {
+      setUploadError(err.message)
+    } finally {
+      setUploading(false)
+    }
   }
 
   // --- CRUD ACTIONS ---
@@ -424,16 +449,50 @@ export default function Dashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold uppercase text-slate-500 mb-2">URL Gambar Sampul</label>
-                    <input
-                      type="url"
-                      required
-                      value={beritaForm.image}
-                      onChange={(e) => setBeritaForm({ ...beritaForm, image: e.target.value })}
-                      placeholder="Contoh: https://images.unsplash.com/photo-..."
-                      className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] focus:outline-none transition"
-                    />
+                    <label className="block text-xs font-semibold uppercase text-slate-500 mb-2">Gambar Sampul</label>
+                    {beritaForm.image && (
+                      <div className="mb-3 relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 h-40 w-full max-w-md">
+                        <img src={beritaForm.image} alt="Preview" className="h-full w-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => setBeritaForm(prev => ({ ...prev, image: '' }))}
+                          className="absolute top-2 right-2 rounded-full bg-red-600 hover:bg-red-700 p-2 text-white text-xs transition"
+                          title="Hapus Gambar"
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                      </div>
+                    )}
+                    
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <div className="relative flex-1">
+                        <input
+                          type="text"
+                          required
+                          value={beritaForm.image}
+                          onChange={(e) => setBeritaForm({ ...beritaForm, image: e.target.value })}
+                          placeholder="Masukkan URL gambar atau gunakan tombol upload..."
+                          className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] focus:outline-none transition"
+                        />
+                      </div>
+                      <div className="relative">
+                        <label className={`inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold text-white cursor-pointer transition focus:outline-none shadow-sm ${uploading ? 'bg-slate-400' : 'bg-slate-700 hover:bg-slate-800'}`}>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            disabled={uploading}
+                            className="hidden"
+                          />
+                          {uploading ? 'Mengunggah...' : 'Upload File'}
+                        </label>
+                      </div>
+                    </div>
+                    {uploadError && (
+                      <p className="text-xs text-red-600 mt-2">Error upload: {uploadError}</p>
+                    )}
                   </div>
+
                   <div>
                     <label className="block text-xs font-semibold uppercase text-slate-500 mb-2">Konten Lengkap</label>
                     <textarea
