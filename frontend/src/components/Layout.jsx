@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PageTransition from './PageTransition'
+import logoIkm from '../assets/logo-ikm.png'
 import {
   faHome,
   faInfoCircle,
@@ -35,9 +36,7 @@ export default function Layout() {
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <NavLink to="/" className="flex items-center gap-3">
-            <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-marawa-gradient text-lg font-bold text-white">
-              I
-            </span>
+            <img src={logoIkm} alt="IKM ITERA Logo" className="h-12 w-12 object-contain rounded-full shadow-sm" />
             <div>
               <p className="text-lg font-semibold text-[#8b0000]">IKM ITERA</p>
               <p className="text-xs uppercase tracking-[0.32em] text-slate-500">Ikatan Keluarga Minangkabau</p>
@@ -65,9 +64,9 @@ export default function Layout() {
                   to={item.to}
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
-                    `inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium transition ${
+                    `inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium border-2 border-transparent transition ${
                       isActive
-                        ? 'bg-marawa-gradient text-white shadow-lg shadow-red-200/30'
+                        ? 'marawa-outline-active'
                         : 'text-slate-700 hover:text-[#8b0000] hover:bg-slate-100'
                     }`
                   }
@@ -81,9 +80,9 @@ export default function Layout() {
                   to="/admin/dashboard"
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
-                    `inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold border transition ${
+                    `inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold border-2 transition ${
                       isActive
-                        ? 'bg-marawa-gradient text-white border-transparent'
+                        ? 'marawa-outline-active'
                         : 'border-[#8b0000]/20 text-[#8b0000] hover:bg-[#8b0000] hover:text-white hover:border-transparent'
                     }`
                   }
@@ -96,9 +95,9 @@ export default function Layout() {
                   to="/admin/login"
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
-                    `inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold border transition ${
+                    `inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold border-2 transition ${
                       isActive
-                        ? 'bg-marawa-gradient text-white border-transparent'
+                        ? 'marawa-outline-active'
                         : 'border-[#8b0000]/20 text-[#8b0000] hover:bg-[#8b0000] hover:text-white hover:border-transparent'
                     }`
                   }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchBerita, fetchPrestasi } from '../services/api'
+import LoadingLogo from '../components/LoadingLogo'
 
 function PortalSkeleton() {
   return (
@@ -141,7 +142,7 @@ export default function Portal() {
         </div>
 
         {loading ? (
-          <PortalSkeleton />
+          <LoadingLogo message="Memuat Berita & Prestasi IKM..." />
         ) : error ? (
           <div className="rounded-[2rem] border border-red-300 bg-red-50 p-10 text-center text-red-700 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.10)]">
             Terjadi kesalahan: {error}

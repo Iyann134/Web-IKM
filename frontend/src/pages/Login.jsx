@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { loginAdmin } from '../services/api'
+import logoIkm from '../assets/logo-ikm.png'
 
 export default function Login() {
   const [username, setUsername] = useState('')
@@ -48,9 +49,7 @@ export default function Login() {
         <div className="absolute top-0 left-0 right-0 h-2 bg-marawa-gradient"></div>
 
         <div className="text-center mb-8">
-          <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-marawa-gradient text-lg font-bold text-white mb-4">
-            I
-          </span>
+          <img src={logoIkm} alt="IKM ITERA Logo" className="mx-auto h-16 w-16 object-contain rounded-full shadow-sm mb-4" />
           <h1 className="text-2xl font-bold text-[#8b0000]">Login Administrator</h1>
           <p className="text-xs text-slate-500 mt-2 uppercase tracking-widest">Web Portal IKM ITERA</p>
         </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import LoadingLogo from '../components/LoadingLogo'
 import {
   faPlus,
   faEdit,
@@ -42,6 +43,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [successMsg, setSuccessMsg] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+
 
   // Modal / Form States
   const [showModal, setShowModal] = useState(false)
@@ -252,9 +255,9 @@ export default function Dashboard() {
                   setActiveTab(tab.id)
                   setError(null)
                 }}
-                className={`inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold rounded-2xl transition focus:outline-none ${
+                className={`inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold rounded-2xl border-2 border-transparent transition focus:outline-none ${
                   activeTab === tab.id
-                    ? 'bg-marawa-gradient text-white shadow-md'
+                    ? 'marawa-outline-active'
                     : 'text-slate-600 hover:bg-slate-100 hover:text-[#8b0000]'
                 }`}
               >
@@ -275,93 +278,156 @@ export default function Dashboard() {
         {/* Contents Grid */}
         <div className="bg-white rounded-[2rem] border border-[#8b0000]/10 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.15)] p-6 md:p-8 min-h-[400px]">
           {loading ? (
-            <div className="flex items-center justify-center h-[300px] text-[#8b0000] font-semibold animate-pulse">
-              Memuat data administrasi...
-            </div>
+            <LoadingLogo message="Memuat data administrasi..." />
           ) : (
-            <div className="overflow-x-auto">
+            <div className="flex flex-col gap-6">
               
-              {/* --- PENGURUS TABLE --- */}
-              {activeTab === 'pengurus' && (
-                <table className="w-full text-left border-collapse min-w-[600px]">
-                  <thead>
-                    <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
-                      <th className="py-4 px-4">Nama</th>
-                      <th className="py-4 px-4">Jabatan</th>
-                      <th className="py-4 px-4">Deskripsi</th>
-                      <th className="py-4 px-4 text-center">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-sm">
-                    {pengurusList.map(member => (
-                      <tr key={member.id} className="hover:bg-slate-50 transition">
-                        <td className="py-4 px-4 font-semibold text-slate-800">{member.name}</td>
-                        <td className="py-4 px-4"><span className="rounded-full bg-[#fff2ef] border border-[#8b0000]/15 px-3 py-1 text-xs text-[#8b0000] font-medium">{member.role}</span></td>
-                        <td className="py-4 px-4 text-slate-600 max-w-xs truncate">{member.description}</td>
-                        <td className="py-4 px-4 text-center space-x-2">
-                          <button onClick={() => handleOpenEdit('pengurus', member)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
-                          <button onClick={() => handleDelete('pengurus', member.id)} className="p-2 text-slate-500 hover:text-red-600 transition" title="Delete"><FontAwesomeIcon icon={faTrash} /></button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
+              {/* Search Box */}
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder={`Cari data ${activeTab === 'pengurus' ? 'pengurus' : activeTab === 'berita' ? 'berita' : 'prestasi'}...`}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full rounded-2xl border border-slate-200 bg-[#fffbf9] px-5 py-3 text-sm focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] focus:outline-none transition shadow-sm"
+                />
+              </div>
 
-              {/* --- BERITA TABLE --- */}
-              {activeTab === 'berita' && (
-                <table className="w-full text-left border-collapse min-w-[600px]">
-                  <thead>
-                    <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
-                      <th className="py-4 px-4">Judul</th>
-                      <th className="py-4 px-4">Tanggal</th>
-                      <th className="py-4 px-4">Konten</th>
-                      <th className="py-4 px-4 text-center">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-sm">
-                    {beritaList.map(article => (
-                      <tr key={article.id} className="hover:bg-slate-50 transition">
-                        <td className="py-4 px-4 font-semibold text-slate-800">{article.title}</td>
-                        <td className="py-4 px-4 text-slate-500">{article.date}</td>
-                        <td className="py-4 px-4 text-slate-600 max-w-sm truncate">{article.content}</td>
-                        <td className="py-4 px-4 text-center space-x-2">
-                          <button onClick={() => handleOpenEdit('berita', article)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
-                          <button onClick={() => handleDelete('berita', article.id)} className="p-2 text-slate-500 hover:text-red-600 transition" title="Delete"><FontAwesomeIcon icon={faTrash} /></button>
-                        </td>
+              <div className="overflow-x-auto">
+                
+                {/* --- PENGURUS TABLE --- */}
+                {activeTab === 'pengurus' && (
+                  <table className="w-full text-left border-collapse min-w-[600px]">
+                    <thead>
+                      <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
+                        <th className="py-4 px-4">Nama</th>
+                        <th className="py-4 px-4">Jabatan</th>
+                        <th className="py-4 px-4">Deskripsi</th>
+                        <th className="py-4 px-4 text-center">Aksi</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-sm">
+                      {pengurusList
+                        .filter(member => 
+                          member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          member.description.toLowerCase().includes(searchQuery.toLowerCase())
+                        )
+                        .map(member => (
+                          <tr key={member.id} className="hover:bg-slate-50 transition">
+                            <td className="py-4 px-4 font-semibold text-slate-800">{member.name}</td>
+                            <td className="py-4 px-4"><span className="rounded-full bg-[#fff2ef] border border-[#8b0000]/15 px-3 py-1 text-xs text-[#8b0000] font-medium">{member.role}</span></td>
+                            <td className="py-4 px-4 text-slate-600 max-w-xs truncate">{member.description}</td>
+                            <td className="py-4 px-4 text-center space-x-2">
+                              <button onClick={() => handleOpenEdit('pengurus', member)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
+                              <button onClick={() => handleDelete('pengurus', member.id)} className="p-2 text-slate-500 hover:text-red-600 transition" title="Delete"><FontAwesomeIcon icon={faTrash} /></button>
+                            </td>
+                          </tr>
+                        ))}
+                      {pengurusList.filter(member => 
+                        member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        member.description.toLowerCase().includes(searchQuery.toLowerCase())
+                      ).length === 0 && (
+                        <tr>
+                          <td colSpan="4" className="py-8 text-center text-slate-500">Tidak ada pengurus yang cocok.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                )}
 
-              {/* --- PRESTASI TABLE --- */}
-              {activeTab === 'prestasi' && (
-                <table className="w-full text-left border-collapse min-w-[600px]">
-                  <thead>
-                    <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
-                      <th className="py-4 px-4">Judul Prestasi</th>
-                      <th className="py-4 px-4">Tahun</th>
-                      <th className="py-4 px-4">Deskripsi</th>
-                      <th className="py-4 px-4 text-center">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-sm">
-                    {prestasiList.map(achievement => (
-                      <tr key={achievement.id} className="hover:bg-slate-50 transition">
-                        <td className="py-4 px-4 font-semibold text-slate-800">{achievement.title}</td>
-                        <td className="py-4 px-4"><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold">{achievement.year}</span></td>
-                        <td className="py-4 px-4 text-slate-600 max-w-sm truncate">{achievement.description}</td>
-                        <td className="py-4 px-4 text-center space-x-2">
-                          <button onClick={() => handleOpenEdit('prestasi', achievement)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
-                          <button onClick={() => handleDelete('prestasi', achievement.id)} className="p-2 text-slate-500 hover:text-red-600 transition" title="Delete"><FontAwesomeIcon icon={faTrash} /></button>
-                        </td>
+                {/* --- BERITA TABLE --- */}
+                {activeTab === 'berita' && (
+                  <table className="w-full text-left border-collapse min-w-[600px]">
+                    <thead>
+                      <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
+                        <th className="py-4 px-4 w-28">Sampul</th>
+                        <th className="py-4 px-4">Judul</th>
+                        <th className="py-4 px-4">Tanggal</th>
+                        <th className="py-4 px-4">Konten</th>
+                        <th className="py-4 px-4 text-center">Aksi</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-sm">
+                      {beritaList
+                        .filter(article => 
+                          article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          article.content.toLowerCase().includes(searchQuery.toLowerCase())
+                        )
+                        .map(article => (
+                          <tr key={article.id} className="hover:bg-slate-50 transition">
+                            <td className="py-4 px-4">
+                              {article.image ? (
+                                <img src={article.image} alt={article.title} className="h-10 w-16 object-cover rounded-lg border border-slate-200 shadow-sm" />
+                              ) : (
+                                <div className="h-10 w-16 bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center text-[10px] text-slate-400">No Image</div>
+                              )}
+                            </td>
+                            <td className="py-4 px-4 font-semibold text-slate-800">{article.title}</td>
+                            <td className="py-4 px-4 text-slate-500">{article.date}</td>
+                            <td className="py-4 px-4 text-slate-600 max-w-sm truncate">{article.content}</td>
+                            <td className="py-4 px-4 text-center space-x-2">
+                              <button onClick={() => handleOpenEdit('berita', article)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
+                              <button onClick={() => handleDelete('berita', article.id)} className="p-2 text-slate-500 hover:text-red-600 transition" title="Delete"><FontAwesomeIcon icon={faTrash} /></button>
+                            </td>
+                          </tr>
+                        ))}
+                      {beritaList.filter(article => 
+                        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        article.content.toLowerCase().includes(searchQuery.toLowerCase())
+                      ).length === 0 && (
+                        <tr>
+                          <td colSpan="5" className="py-8 text-center text-slate-500">Tidak ada berita yang cocok.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                )}
 
+                {/* --- PRESTASI TABLE --- */}
+                {activeTab === 'prestasi' && (
+                  <table className="w-full text-left border-collapse min-w-[600px]">
+                    <thead>
+                      <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
+                        <th className="py-4 px-4">Judul Prestasi</th>
+                        <th className="py-4 px-4">Tahun</th>
+                        <th className="py-4 px-4">Deskripsi</th>
+                        <th className="py-4 px-4 text-center">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-sm">
+                      {prestasiList
+                        .filter(achievement => 
+                          achievement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          achievement.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          achievement.year.toString().includes(searchQuery)
+                        )
+                        .map(achievement => (
+                          <tr key={achievement.id} className="hover:bg-slate-50 transition">
+                            <td className="py-4 px-4 font-semibold text-slate-800">{achievement.title}</td>
+                            <td className="py-4 px-4"><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold">{achievement.year}</span></td>
+                            <td className="py-4 px-4 text-slate-600 max-w-sm truncate">{achievement.description}</td>
+                            <td className="py-4 px-4 text-center space-x-2">
+                              <button onClick={() => handleOpenEdit('prestasi', achievement)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
+                              <button onClick={() => handleDelete('prestasi', achievement.id)} className="p-2 text-slate-500 hover:text-red-600 transition" title="Delete"><FontAwesomeIcon icon={faTrash} /></button>
+                            </td>
+                          </tr>
+                        ))}
+                      {prestasiList.filter(achievement => 
+                        achievement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        achievement.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        achievement.year.toString().includes(searchQuery)
+                      ).length === 0 && (
+                        <tr>
+                          <td colSpan="4" className="py-8 text-center text-slate-500">Tidak ada prestasi yang cocok.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                )}
+
+              </div>
             </div>
           )}
         </div>

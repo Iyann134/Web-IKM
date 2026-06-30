@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchPengurus } from '../services/api'
+import LoadingLogo from '../components/LoadingLogo'
 
 function PengurusSkeleton() {
   return (
@@ -76,7 +77,7 @@ export default function Pengurus() {
         </div>
 
         {loading ? (
-          <PengurusSkeleton />
+          <LoadingLogo message="Memuat struktur kepengurusan..." />
         ) : error ? (
           <div className="rounded-[2rem] border border-red-300 bg-red-50 p-10 text-center text-red-700 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.10)]">
             Terjadi kesalahan: {error}

@@ -20,7 +20,20 @@ import { uploadImage } from '../controllers/uploadController.js'
 import { authenticateToken } from '../middleware/auth.js'
 
 const router = express.Router()
-const upload = multer({ storage: multer.memoryStorage() })
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true)
+    } else {
+      cb(new Error('Format file tidak didukung. Harap hanya unggah file gambar (JPG, PNG, WEBP, dll).'), false)
+    }
+  }
+})
+
 
 
 // Authentication
@@ -33,7 +46,17 @@ router.get('/berita/:id', getBeritaById)
 router.get('/prestasi', getPrestasi)
 
 // Protected routes (Write access - Requires JWT token)
-router.post('/upload', authenticateToken, upload.single('image'), uploadImage)
+router.post('/upload', authenticateToken, (req, res, next) => {
+  upload.single('image')(req, res, (err) => {
+    if (err) {
+      return res.status(400).json({
+        success: false,
+        message: err.code === 'LIMIT_FILE_SIZE' ? 'Ukuran file terlalu besar. Batas maksimal adalah 5MB.' : err.message
+      })
+    }
+    next()
+  })
+}, uploadImage)
 
 router.post('/pengurus', authenticateToken, createPengurus)
 router.put('/pengurus/:id', authenticateToken, updatePengurus)

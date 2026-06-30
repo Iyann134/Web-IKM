@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faCalendar } from '@fortawesome/free-solid-svg-icons'
 import { fetchBeritaById } from '../services/api'
+import LoadingLogo from '../components/LoadingLogo'
 
 function DetailBeritaSkeleton() {
   return (
@@ -42,7 +43,7 @@ export default function DetailBerita() {
   if (loading) {
     return (
       <section className="bg-[#fff9f4] py-16 px-6 text-[#1f1414]">
-        <DetailBeritaSkeleton />
+        <LoadingLogo message="Memuat detail berita..." />
       </section>
     )
   }
@@ -90,7 +91,7 @@ export default function DetailBerita() {
         </div>
 
         <div className="mt-8 text-base md:text-lg leading-8 text-slate-700 space-y-6">
-          <p>{article.content}</p>
+          <p className="whitespace-pre-line">{article.content}</p>
           <p className="text-slate-500 text-sm italic">
             *Ini adalah konten lengkap berita kegiatan Ikatan Keluarga Minangkabau ITERA. Konten dapat diperbarui secara dinamis oleh pengurus.
           </p>
