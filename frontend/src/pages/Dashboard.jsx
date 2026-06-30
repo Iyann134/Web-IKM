@@ -57,7 +57,7 @@ export default function Dashboard() {
 
 
   // Form Fields
-  const [pengurusForm, setPengurusForm] = useState({ role: '', name: '', description: '' })
+  const [pengurusForm, setPengurusForm] = useState({ role: '', name: '', description: '', periode: '', nim_nip: '', prodi: '', departemen: '' })
   const [beritaForm, setBeritaForm] = useState({ title: '', date: '', content: '', image: '' })
   const [prestasiForm, setPrestasiForm] = useState({ title: '', year: '', description: '' })
 
@@ -127,7 +127,7 @@ export default function Dashboard() {
   const handleOpenAdd = () => {
     setEditMode(false)
     setCurrentId(null)
-    setPengurusForm({ role: '', name: '', description: '' })
+    setPengurusForm({ role: '', name: '', description: '', periode: '2025/2026', nim_nip: '', prodi: 'Teknik Material', departemen: '-' })
     setBeritaForm({ title: '', date: '', content: '', image: '' })
     setPrestasiForm({ title: '', year: '', description: '' })
     setShowModal(true)
@@ -137,7 +137,15 @@ export default function Dashboard() {
     setEditMode(true)
     setCurrentId(item.id)
     if (type === 'pengurus') {
-      setPengurusForm({ role: item.role, name: item.name, description: item.description })
+      setPengurusForm({ 
+        role: item.role, 
+        name: item.name, 
+        description: item.description, 
+        periode: item.periode || '2025/2026',
+        nim_nip: item.nim_nip || '-',
+        prodi: item.prodi || 'Teknik Material',
+        departemen: item.departemen || '-'
+      })
     } else if (type === 'berita') {
       setBeritaForm({ title: item.title, date: item.date, content: item.content, image: item.image })
     } else if (type === 'prestasi') {
@@ -302,6 +310,10 @@ export default function Dashboard() {
                       <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
                         <th className="py-4 px-4">Nama</th>
                         <th className="py-4 px-4">Jabatan</th>
+                        <th className="py-4 px-4">NIM/NIP</th>
+                        <th className="py-4 px-4">Prodi</th>
+                        <th className="py-4 px-4">Departemen</th>
+                        <th className="py-4 px-4">Periode</th>
                         <th className="py-4 px-4">Deskripsi</th>
                         <th className="py-4 px-4 text-center">Aksi</th>
                       </tr>
@@ -311,12 +323,20 @@ export default function Dashboard() {
                         .filter(member => 
                           member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          (member.periode || '2025/2026').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          (member.nim_nip || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          (member.prodi || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          (member.departemen || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                           member.description.toLowerCase().includes(searchQuery.toLowerCase())
                         )
                         .map(member => (
                           <tr key={member.id} className="hover:bg-slate-50 transition">
                             <td className="py-4 px-4 font-semibold text-slate-800">{member.name}</td>
                             <td className="py-4 px-4"><span className="rounded-full bg-[#fff2ef] border border-[#8b0000]/15 px-3 py-1 text-xs text-[#8b0000] font-medium">{member.role}</span></td>
+                            <td className="py-4 px-4 text-slate-600">{member.nim_nip || '-'}</td>
+                            <td className="py-4 px-4 text-slate-600">{member.prodi || 'Teknik Material'}</td>
+                            <td className="py-4 px-4 text-slate-600"><span className="rounded-full bg-slate-100 border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600">{member.departemen || '-'}</span></td>
+                            <td className="py-4 px-4"><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">{member.periode || '2025/2026'}</span></td>
                             <td className="py-4 px-4 text-slate-600 max-w-xs truncate">{member.description}</td>
                             <td className="py-4 px-4 text-center space-x-2">
                               <button onClick={() => handleOpenEdit('pengurus', member)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
@@ -327,10 +347,14 @@ export default function Dashboard() {
                       {pengurusList.filter(member => 
                         member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                         member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        (member.periode || '2025/2026').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        (member.nim_nip || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        (member.prodi || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        (member.departemen || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                         member.description.toLowerCase().includes(searchQuery.toLowerCase())
                       ).length === 0 && (
                         <tr>
-                          <td colSpan="4" className="py-8 text-center text-slate-500">Tidak ada pengurus yang cocok.</td>
+                          <td colSpan="8" className="py-8 text-center text-slate-500">Tidak ada pengurus yang cocok.</td>
                         </tr>
                       )}
                     </tbody>
@@ -472,7 +496,56 @@ export default function Dashboard() {
                       required
                       value={pengurusForm.role}
                       onChange={(e) => setPengurusForm({ ...pengurusForm, role: e.target.value })}
-                      placeholder="Contoh: Ketua Umum, Sekretaris, Departemen"
+                      placeholder="Contoh: Datuak (Ketua Umum), Bundo Kanduang, Sekretaris Umum, Kepala Departemen"
+                      className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] focus:outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase text-slate-500 mb-2">NIM / NIP</label>
+                    <input
+                      type="text"
+                      required
+                      value={pengurusForm.nim_nip}
+                      onChange={(e) => setPengurusForm({ ...pengurusForm, nim_nip: e.target.value })}
+                      placeholder="Masukkan NIM (mahasiswa) atau NIP (dosen)"
+                      className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] focus:outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase text-slate-500 mb-2">Program Studi</label>
+                    <input
+                      type="text"
+                      required
+                      value={pengurusForm.prodi}
+                      onChange={(e) => setPengurusForm({ ...pengurusForm, prodi: e.target.value })}
+                      placeholder="Masukkan nama Program Studi, contoh: Teknik Material"
+                      className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] focus:outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase text-slate-500 mb-2">Departemen</label>
+                    <select
+                      value={pengurusForm.departemen}
+                      onChange={(e) => setPengurusForm({ ...pengurusForm, departemen: e.target.value })}
+                      className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm focus:border-[#8b0000] focus:outline-none bg-white transition cursor-pointer"
+                    >
+                      <option value="-">Bukan Departemen (-)</option>
+                      <option value="Seni Budaya">Seni Budaya</option>
+                      <option value="PSDK">PSDK</option>
+                      <option value="Medkom">Medkom</option>
+                      <option value="Entrepreneur">Entrepreneur</option>
+                      <option value="Internal">Internal</option>
+                      <option value="Eksternal">Eksternal</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase text-slate-500 mb-2">Periode Kepengurusan</label>
+                    <input
+                      type="text"
+                      required
+                      value={pengurusForm.periode}
+                      onChange={(e) => setPengurusForm({ ...pengurusForm, periode: e.target.value })}
+                      placeholder="Contoh: 2025/2026, 2026/2027"
                       className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] focus:outline-none transition"
                     />
                   </div>

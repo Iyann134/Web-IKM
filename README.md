@@ -97,35 +97,39 @@ Halaman depan yang menyambut pengunjung dengan visualisasi bertema Minangkabau (
 Menjelaskan sejarah, visi, misi, dan nilai-nilai budaya Minangkabau yang dijunjung tinggi oleh IKM ITERA.
 ![Halaman Tentang](docs/screenshots/tentang.png)
 
-### 3. Halaman Portal Berita (News Portal)
-Pusat publikasi berita terkini, artikel budaya, kegiatan organisasi, dan prestasi yang diraih oleh mahasiswa Minang di ITERA.
-![Halaman Portal Berita](docs/screenshots/portal.png)
+### 3. Halaman Berita Terkini (News)
+Pusat informasi berita terbaru mengenai seluruh kegiatan, acara, dan laporan aktivitas rutin dari IKM ITERA.
+![Halaman Berita Terkini](docs/screenshots/berita.png)
 
 ### 4. Halaman Detail Berita
 Tampilan detail artikel/berita lengkap yang menyertakan teks berita utuh beserta gambar pendukung.
 ![Halaman Detail Berita](docs/screenshots/detail_berita.png)
 
-### 5. Halaman Struktur Kepengurusan (Committee)
-Menampilkan daftar pengurus lengkap, mulai dari Dosen Pembina, Badan Pengurus Harian (BPH), hingga departemen-departemen di bawahnya.
+### 5. Halaman Prestasi Mahasiswa (Achievements)
+Halaman apresiasi dan dokumentasi prestasi yang diraih oleh mahasiswa Minangkabau ITERA baik dalam bidang akademik maupun non-akademik.
+![Halaman Prestasi Mahasiswa](docs/screenshots/prestasi.png)
+
+### 6. Halaman Struktur Kepengurusan (Committee - Organogram)
+Menampilkan bagan hirarki/organogram kepengurusan visual yang premium. Struktur ini memetakan Dosen Pembina, pimpinan utama (Datuak, Bundo Kanduang, Cadiak Pandai, Suluah Bendang), kesekretariatan & kebendaharaan bercabang, hingga 6 departemen kerja lengkap dengan filter periode kepengurusan.
 ![Halaman Struktur Kepengurusan](docs/screenshots/pengurus.png)
 
-### 6. Halaman Login Administrator
+### 7. Halaman Login Administrator
 Halaman autentikasi khusus bagi pengurus untuk masuk ke dashboard admin guna mengelola konten website.
 ![Halaman Login Administrator](docs/screenshots/login.png)
 
-### 7. Halaman Dashboard Admin - Manajemen Pengurus (Tab Default)
-Panel kendali utama admin yang menampilkan daftar Badan Pengurus Harian (BPH) dan departemen. Dari panel ini, administrator dapat mencari, menambah, memperbarui, atau menghapus data pengurus secara interaktif.
+### 8. Halaman Dashboard Admin - Manajemen Pengurus (Tab Default)
+Panel kendali utama admin yang menampilkan daftar Badan Pengurus Harian (BPH) dan departemen lengkap dengan kolom **NIM/NIP**, **Prodi**, **Departemen**, dan **Periode**. Dari panel ini, administrator dapat mencari, menambah, memperbarui, atau menghapus data pengurus secara interaktif.
 ![Dashboard - Manajemen Pengurus](docs/screenshots/dashboard.png)
 
-### 8. Halaman Dashboard Admin - Manajemen Berita (Tab Berita)
+### 9. Halaman Dashboard Admin - Manajemen Berita (Tab Berita)
 Panel khusus untuk mengelola konten berita dan artikel kegiatan IKM ITERA. Dilengkapi dengan daftar ringkasan berita, fitur pencarian berita, serta opsi edit/hapus.
 ![Dashboard - Manajemen Berita](docs/screenshots/dashboard_berita.png)
 
-### 9. Halaman Dashboard Admin - Manajemen Prestasi (Tab Prestasi)
+### 10. Halaman Dashboard Admin - Manajemen Prestasi (Tab Prestasi)
 Panel khusus untuk mengelola rekam jejak prestasi mahasiswa/organisasi Minangkabau di lingkungan ITERA.
 ![Dashboard - Manajemen Prestasi](docs/screenshots/dashboard_prestasi.png)
 
-### 10. Halaman Dashboard Admin - Formulir Tambah/Edit Data (Modal)
-Tampilan pop-up modal formulir interaktif ketika tombol **Tambah Data** diklik. Form ini menyesuaikan input field-nya secara cerdas berdasarkan tab manajemen data yang sedang aktif (Pengurus, Berita, atau Prestasi).
-![Dashboard - Formulir Modal](docs/screenshots/dashboard_modal.png)
+### 11. Halaman Dashboard Admin - Formulir Tambah/Edit Data (Modal)
+Tampilan pop-up modal formulir interaktif ketika tombol **Tambah Data** diklik. Form ini menyesuaikan input field-nya secara cerdas berdasarkan tab manajemen data yang sedang aktif (Pengurus, Berita, atau Prestasi) dan kini dilengkapi dengan input **Periode Kepengurusan** untuk data pengurus.
+![Dashboard - Formulir Modal](docs/screenshots/dashboard_modal_pengurus.png)
 

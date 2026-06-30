@@ -55,11 +55,11 @@ export default function DetailBerita() {
           <p className="text-lg font-semibold">Gagal Memuat Berita</p>
           <p className="mt-2 text-sm text-red-600">{error || 'Berita tidak ditemukan.'}</p>
           <button
-            onClick={() => navigate('/portal')}
+            onClick={() => navigate('/informasi/berita')}
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#8b0000] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#b11919]"
           >
             <FontAwesomeIcon icon={faArrowLeft} />
-            Kembali ke Portal
+            Kembali ke Berita
           </button>
         </div>
       </section>
@@ -70,11 +70,11 @@ export default function DetailBerita() {
     <section className="bg-[#fff9f4] py-16 px-6 text-[#1f1414]">
       <article className="mx-auto max-w-4xl bg-white rounded-[2rem] border border-[#8b0000]/10 p-6 md:p-10 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.18)]">
         <button
-          onClick={() => navigate('/portal')}
+          onClick={() => navigate('/informasi/berita')}
           className="inline-flex items-center gap-2 text-slate-500 hover:text-[#8b0000] font-medium transition text-sm mb-6"
         >
           <FontAwesomeIcon icon={faArrowLeft} />
-          Kembali ke Portal
+          Kembali ke Berita
         </button>
 
         <h1 className="text-3xl md:text-4xl font-bold text-[#8b0000] leading-tight">

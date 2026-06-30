@@ -6,28 +6,25 @@ import logoIkm from '../assets/logo-ikm.png'
 import {
   faHome,
   faInfoCircle,
-  faChartLine,
+  faChevronDown,
   faUsers,
   faBars,
   faXmark,
   faLock,
-  faSignInAlt
+  faSignInAlt,
+  faNewspaper,
+  faTrophy
 } from '@fortawesome/free-solid-svg-icons'
-
-const navItems = [
-  { to: '/', label: 'Beranda', icon: faHome },
-  { to: '/tentang', label: 'Tentang', icon: faInfoCircle },
-  { to: '/portal', label: 'Portal', icon: faChartLine },
-  { to: '/pengurus', label: 'Pengurus', icon: faUsers }
-]
 
 export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false)
   const location = useLocation()
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('adminToken'))
 
   useEffect(() => {
     setIsLoggedIn(!!localStorage.getItem('adminToken'))
+    setMobileDropdownOpen(false)
   }, [location])
 
 
@@ -58,23 +55,153 @@ export default function Layout() {
             } absolute inset-x-4 top-full mt-2 rounded-3xl border border-slate-200 bg-white/95 px-4 py-5 shadow-xl shadow-slate-200/30 backdrop-blur-md md:static md:block md:mt-0 md:px-0 md:py-0 md:border-0 md:bg-transparent md:shadow-none`}
           >
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-end md:gap-4">
-              {navItems.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  onClick={() => setMenuOpen(false)}
-                  className={({ isActive }) =>
-                    `inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium border-2 border-transparent transition ${
-                      isActive
-                        ? 'marawa-outline-active'
-                        : 'text-slate-700 hover:text-[#8b0000] hover:bg-slate-100'
-                    }`
-                  }
+              {/* Beranda */}
+              <NavLink
+                to="/"
+                onClick={() => setMenuOpen(false)}
+                className={({ isActive }) =>
+                  `inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium border-2 border-transparent transition ${
+                    isActive
+                      ? 'marawa-outline-active'
+                      : 'text-slate-700 hover:text-[#8b0000] hover:bg-slate-100'
+                  }`
+                }
+              >
+                <FontAwesomeIcon icon={faHome} />
+                Beranda
+              </NavLink>
+
+              {/* Tentang */}
+              <NavLink
+                to="/tentang"
+                onClick={() => setMenuOpen(false)}
+                className={({ isActive }) =>
+                  `inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium border-2 border-transparent transition ${
+                    isActive
+                      ? 'marawa-outline-active'
+                      : 'text-slate-700 hover:text-[#8b0000] hover:bg-slate-100'
+                  }`
+                }
+              >
+                <FontAwesomeIcon icon={faInfoCircle} />
+                Tentang
+              </NavLink>
+
+              {/* Dropdown Informasi - Desktop */}
+              <div className="relative group hidden md:block">
+                <button
+                  type="button"
+                  className={`inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium border-2 border-transparent transition cursor-pointer ${
+                    location.pathname.startsWith('/informasi')
+                      ? 'marawa-outline-active'
+                      : 'text-slate-700 hover:text-[#8b0000] hover:bg-slate-100'
+                  }`}
                 >
-                  <FontAwesomeIcon icon={item.icon} />
-                  {item.label}
-                </NavLink>
-              ))}
+                  <FontAwesomeIcon icon={faChevronDown} className="text-xs transition-transform group-hover:rotate-180 duration-300" />
+                  Informasi
+                </button>
+                <div className="absolute left-0 top-full mt-1 w-52 origin-top-left rounded-2xl border border-slate-200/80 bg-white p-2 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform scale-95 group-hover:scale-100 z-50">
+                  <NavLink
+                    to="/informasi/berita"
+                    className={({ isActive }) =>
+                      `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
+                        isActive
+                          ? 'bg-[#8b0000]/10 text-[#8b0000]'
+                          : 'text-slate-700 hover:bg-slate-50 hover:text-[#8b0000]'
+                      }`
+                    }
+                  >
+                    <FontAwesomeIcon icon={faNewspaper} className="w-4" />
+                    Berita Terkini
+                  </NavLink>
+                  <NavLink
+                    to="/informasi/prestasi"
+                    className={({ isActive }) =>
+                      `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
+                        isActive
+                          ? 'bg-[#8b0000]/10 text-[#8b0000]'
+                          : 'text-slate-700 hover:bg-slate-50 hover:text-[#8b0000]'
+                      }`
+                    }
+                  >
+                    <FontAwesomeIcon icon={faTrophy} className="w-4" />
+                    Prestasi Mahasiswa
+                  </NavLink>
+                </div>
+              </div>
+
+              {/* Dropdown Informasi - Mobile */}
+              <div className="md:hidden">
+                <button
+                  type="button"
+                  onClick={() => setMobileDropdownOpen((prev) => !prev)}
+                  className={`flex w-full items-center justify-between gap-2 rounded-2xl px-4 py-3 text-sm font-medium border-2 border-transparent transition ${
+                    location.pathname.startsWith('/informasi')
+                      ? 'marawa-outline-active'
+                      : 'text-slate-700 hover:text-[#8b0000] hover:bg-slate-100'
+                  }`}
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <FontAwesomeIcon icon={location.pathname.startsWith('/informasi') ? faNewspaper : faChevronDown} />
+                    Informasi
+                  </span>
+                  <FontAwesomeIcon icon={faChevronDown} className={`text-xs transition-transform duration-300 ${mobileDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {mobileDropdownOpen && (
+                  <div className="mt-1 pl-4 space-y-1">
+                    <NavLink
+                      to="/informasi/berita"
+                      onClick={() => {
+                        setMenuOpen(false)
+                        setMobileDropdownOpen(false)
+                      }}
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
+                          isActive
+                            ? 'bg-[#8b0000]/10 text-[#8b0000]'
+                            : 'text-slate-700 hover:bg-slate-50 hover:text-[#8b0000]'
+                        }`
+                      }
+                    >
+                      <FontAwesomeIcon icon={faNewspaper} className="w-4" />
+                      Berita Terkini
+                    </NavLink>
+                    <NavLink
+                      to="/informasi/prestasi"
+                      onClick={() => {
+                        setMenuOpen(false)
+                        setMobileDropdownOpen(false)
+                      }}
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
+                          isActive
+                            ? 'bg-[#8b0000]/10 text-[#8b0000]'
+                            : 'text-slate-700 hover:bg-slate-50 hover:text-[#8b0000]'
+                        }`
+                      }
+                    >
+                      <FontAwesomeIcon icon={faTrophy} className="w-4" />
+                      Prestasi Mahasiswa
+                    </NavLink>
+                  </div>
+                )}
+              </div>
+
+              {/* Pengurus */}
+              <NavLink
+                to="/pengurus"
+                onClick={() => setMenuOpen(false)}
+                className={({ isActive }) =>
+                  `inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium border-2 border-transparent transition ${
+                    isActive
+                      ? 'marawa-outline-active'
+                      : 'text-slate-700 hover:text-[#8b0000] hover:bg-slate-100'
+                  }`
+                }
+              >
+                <FontAwesomeIcon icon={faUsers} />
+                Pengurus
+              </NavLink>
               {isLoggedIn ? (
                 <NavLink
                   to="/admin/dashboard"

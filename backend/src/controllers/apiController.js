@@ -72,10 +72,18 @@ export const getPengurus = async (req, res) => {
 
 export const createPengurus = async (req, res) => {
   try {
-    const { role, name, description } = req.body
+    const { role, name, description, periode, nim_nip, prodi, departemen } = req.body
     const { data, error } = await supabase
       .from('pengurus')
-      .insert([{ role, name, description }])
+      .insert([{ 
+        role, 
+        name, 
+        description, 
+        periode: periode || '2025/2026',
+        nim_nip: nim_nip || '-',
+        prodi: prodi || 'Teknik Material',
+        departemen: departemen || '-'
+      }])
       .select()
 
     if (error) throw error
@@ -88,10 +96,18 @@ export const createPengurus = async (req, res) => {
 export const updatePengurus = async (req, res) => {
   try {
     const { id } = req.params
-    const { role, name, description } = req.body
+    const { role, name, description, periode, nim_nip, prodi, departemen } = req.body
     const { data, error } = await supabase
       .from('pengurus')
-      .update({ role, name, description })
+      .update({ 
+        role, 
+        name, 
+        description, 
+        periode: periode || '2025/2026',
+        nim_nip: nim_nip || '-',
+        prodi: prodi || 'Teknik Material',
+        departemen: departemen || '-'
+      })
       .eq('id', parseInt(id))
       .select()
 
