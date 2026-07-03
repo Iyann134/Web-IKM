@@ -1,0 +1,271 @@
+{
+  "organisasi": "BPH IKM 2026/2027",
+  "dosen_pembina": {
+    "jabatan": "Dosen Pembina",
+    "nama": "Dr. Eng. Feerzet Achmad, S.T., M.T.",
+    "nip": "1975041720171091",
+    "prodi": "Teknik Kimia"
+  },
+  "pimpinan_puncak": {
+    "jabatan": "Datuak (Ketua Umum)",
+    "nama": "Rafi Iskandar",
+    "nim": "124170100",
+    "prodi": "Teknik Mesin"
+  },
+  "penasihat": [
+    { "jabatan": "Bundo Kanduang", "nama": "Dina Olivia", "nim": "124140213", "prodi": "Teknik Informatika" },
+    { "jabatan": "Suluah Bendang", "nama": "Fadly Asidikhi", "nim": "124370113", "prodi": "Teknik Pertambangan" },
+    { "jabatan": "Cadiak Pandai", "nama": "Andre Ramadhani", "nim": "124360072", "prodi": "Teknik Material" }
+  ],
+  "pengurus_inti": {
+    "kesekretariatan": {
+      "kepala": { "jabatan": "Kepala Departemen Kesekretariatan", "nama": "Annisa Azharul", "nim": "124430021", "prodi": "Teknik Biomedis" },
+      "staff_popup_data": [
+        { "jabatan": "Sekretaris 1", "nama": "Nayla Intan Nafisha", "nim": "124310016", "prodi": "Teknik Biosistem" },
+        { "jabatan": "Sekretaris 2", "nama": "Nur Aini", "nim": "125130074", "prodi": "Teknik Elektro" }
+      ]
+    },
+    "keuangan": {
+      "kepala": { "jabatan": "Kepala Departemen Keuangan", "nama": "Adelia Nindrika", "nim": "124410079", "prodi": "Sains Aktuaria" },
+      "staff_popup_data": [
+        { "jabatan": "Bendahara 1", "nama": "Hanifah Fauziah Khaira", "nim": "124260097", "prodi": "Farmasi" },
+        { "jabatan": "Bendahara 2", "nama": "Assyifa Nabiilah", "nim": "125120024", "prodi": "Teknik Geofisika" }
+      ]
+    }
+  },
+  "jajaran_departemen": [
+    {
+      "nama_departemen": "Eksternal",
+      "kepala_departemen": { "nama": "Ismail Syafril", "nim": "124120002", "prodi": "Teknik Geofisika" },
+      "sekretaris_departemen": { "nama": "Jihan Arifah Az-zahra", "nim": "124250126", "prodi": "Teknik Lingkungan" },
+      "divisi": [
+        {
+          "nama_divisi": "Ekstra Kampus",
+          "kepala_divisi": { "nama": "Ilham", "nim": "124250042", "prodi": "Teknik Lingkungan" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Divisi Ekstra Kampus", "nama": "Chaisa Cahya Putri Natali Shagun", "nim": "125280065", "prodi": "Teknik Kimia" },
+            { "jabatan": "Staff Divisi Ekstra Kampus", "nama": "Fauzi Rahman", "nim": "125170042", "prodi": "Teknik Mesin" },
+            { "jabatan": "Staff Divisi Ekstra Kampus", "nama": "Chairan Fadjri", "nim": "125460019", "prodi": "Teknik Perkeretaapian" },
+            { "jabatan": "Staff Divisi Ekstra Kampus", "nama": "Diana Warman", "nim": "125230047", "prodi": "Teknik Geomatika" },
+            { "jabatan": "Staff Divisi Ekstra Kampus", "nama": "Hafizul Zikri", "nim": "125210181", "prodi": "Teknik Sipil" },
+            { "jabatan": "Staff Divisi Ekstra Kampus", "nama": "Muthia Rabbani", "nim": "125400002", "prodi": "Teknik Telekomunikasi" },
+            { "jabatan": "Staff Divisi Ekstra Kampus", "nama": "Regina Azqia Qalbi", "nim": "125310095", "prodi": "Teknik Biosistem" },
+            { "jabatan": "Staff Divisi Ekstra Kampus", "nama": "Muhammad Alfo Siddiq", "nim": "125130138", "prodi": "Teknik Elektro" }
+          ]
+        },
+        {
+          "nama_divisi": "Sosmas",
+          "kepala_divisi": { "nama": "Aulia Nazra Rahmadhani", "nim": "124340015", "prodi": "Teknik Sistem Energi" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Divisi Sosial Masyarakat", "nama": "Adinda Syaira Fatima", "nim": "125430037", "prodi": "Teknik Biomedis" },
+            { "jabatan": "Staff Divisi Sosial Masyarakat", "nama": "Jihan Asyisyura", "nim": "125120134", "prodi": "Teknik Geofisika" },
+            { "jabatan": "Staff Divisi Sosial Masyarakat", "nama": "Zakhruf Muharwan Yanza", "nim": "125480021", "prodi": "Rekayasa Minyak dan Gas" },
+            { "jabatan": "Staff Divisi Sosial Masyarakat", "nama": "Nayla Salsabila", "nim": "125430108", "prodi": "Teknik Biomedis" },
+            { "jabatan": "Staff Divisi Sosial Masyarakat", "nama": "Muhammad Haikal Farros", "nim": "125450049", "prodi": "Sains Data" },
+            { "jabatan": "Staff Divisi Sosial Masyarakat", "nama": "Ariq Rais Alfarizy", "nim": "125120031", "prodi": "Teknik Geofisika" },
+            { "jabatan": "Staff Divisi Sosial Masyarakat", "nama": "Zakiah Ulfa Haniah", "nim": "125310069", "prodi": "Teknik Biosistem" }
+          ]
+        },
+        {
+          "nama_divisi": "Intra Kampus",
+          "kepala_divisi": { "nama": "Sulthan Aziz", "nim": "124150071", "prodi": "Teknik Geologi" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Divisi Intra Kampus", "nama": "Ghandy Prasetia", "nim": "125170115", "prodi": "Teknik Mesin" },
+            { "jabatan": "Staff Divisi Intra Kampus", "nama": "Siska Ernawati", "nim": "125370102", "prodi": "Teknik Pertambangan" },
+            { "jabatan": "Staff Divisi Intra Kampus", "nama": "Efni Rahayu", "nim": "125260022", "prodi": "FARMASI" },
+            { "jabatan": "Staff Divisi Intra Kampus", "nama": "Muhammad Enggar At Thaariq", "nim": "125370105", "prodi": "Teknik Pertambangan" },
+            { "jabatan": "Staff Divisi Intra Kampus", "nama": "Revina adha putri", "nim": "125250033", "prodi": "Teknik lingkungan" },
+            { "jabatan": "Staff Divisi Intra Kampus", "nama": "Anisa Ramadani", "nim": "125140018", "prodi": "Teknik Informatika" },
+            { "jabatan": "Staff Divisi Intra Kampus", "nama": "Bintang Nito Alfath", "nim": "125230049", "prodi": "Teknik Geomatika" },
+            { "jabatan": "Staff Divisi Intra Kampus", "nama": "Aina Nur Arifah", "nim": "125210173", "prodi": "Teknik Sipil" }
+          ]
+        }
+      ]
+    },
+    {
+      "nama_departemen": "Internal",
+      "kepala_departemen": { "nama": "Muhammad Agil Fahrezy", "nim": "124120096", "prodi": "Teknik Geofisika" },
+      "sekretaris_departemen": { "nama": "Naufal Aziz Ferdian", "nim": "124450116", "prodi": "Sains Data" },
+      "divisi": [
+        {
+          "nama_divisi": "Badan Rumah Tangga",
+          "kepala_divisi": { "nama": "Verol Difa Vrayatha", "nim": "124120099", "prodi": "Teknik Geofisika" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Divisi Badan Rumah Tangga", "nama": "Faktur Rahman Yovindra", "nim": "125130023", "prodi": "Teknik Elektro" },
+            { "jabatan": "Staff Divisi Badan Rumah Tangga", "nama": "Miftahul Gina", "nim": "125260074", "prodi": "Farmasi" },
+            { "jabatan": "Staff Divisi Badan Rumah Tangga", "nama": "farras abeldira salsabila", "nim": "125500082", "prodi": "rekayasa kosmetik" },
+            { "jabatan": "Staff Divisi Badan Rumah Tangga", "nama": "Alya Natasya", "nim": "125120080", "prodi": "Teknik Geofisika" },
+            { "jabatan": "Staff Divisi Badan Rumah Tangga", "nama": "Afi Zuhdi Azizi", "nim": "125470016", "prodi": "Rekayasa Tata Kelola Air Terpadu" },
+            { "jabatan": "Staff Divisi Badan Rumah Tangga", "nama": "Syarifatuhuda", "nim": "125390036", "prodi": "Arsitektur lanskap" }
+          ]
+        },
+        {
+          "nama_divisi": "Keagamaan",
+          "kepala_divisi": { "nama": "Iqwal Fajar", "nim": "124430066", "prodi": "Teknik Biomedis" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Divisi Keagamaan", "nama": "Muhammad Aditya Ilham", "nim": "125120040", "prodi": "Teknik Geofisika" },
+            { "jabatan": "Staff Divisi Keagamaan", "nama": "Suci Ramadhani", "nim": "125470075", "prodi": "Rekayasa Tata Kelola Air Terpadu" },
+            { "jabatan": "Staff Divisi Keagamaan", "nama": "Raditya Viendra", "nim": "125230119", "prodi": "Teknik Geomatika" },
+            { "jabatan": "Staff Divisi Keagamaan", "nama": "Nurul hanifah", "nim": "125420034", "prodi": "Rekayasa kehutanan" },
+            { "jabatan": "Staff Divisi Keagamaan", "nama": "Habib Al Rashid", "nim": "125370047", "prodi": "Teknik Pertambangan" }
+          ]
+        },
+        {
+          "nama_divisi": "Akademik Non Akademik",
+          "kepala_divisi": { "nama": "Seli Arroma Azizah", "nim": "124230081", "prodi": "Teknik Geomatika" },
+          "staff_popup_data": [
+            { "jabatan": "Staf Divisi Akademik Non Akademik", "nama": "Dira Dwi Fimarta", "nim": "125430068", "prodi": "Teknik Biomedis" },
+            { "jabatan": "Staf Divisi Akademik Non Akademik", "nama": "Wahyu Oktrian Fernanda", "nim": "125210117", "prodi": "Teknik Sipil" },
+            { "jabatan": "Staf Divisi Akademik Non Akademik", "nama": "Muhammad Dzaky Kasri", "nim": "125120005", "prodi": "Teknik Geofisika" },
+            { "jabatan": "Staf Divisi Akademik Non Akademik", "nama": "Gibran Maulana", "nim": "125130084", "prodi": "Teknik Elektro" },
+            { "jabatan": "Staf Divisi Akademik Non Akademik", "nama": "lutfi fadilla", "nim": "125230058", "prodi": "teknik geomatika" },
+            { "jabatan": "Staf Divisi Akademik Non Akademik", "nama": "Jupri Alfiandi", "nim": "125130048", "prodi": "Teknik Elektro" }
+          ]
+        }
+      ]
+    },
+    {
+      "nama_departemen": "PSDK",
+      "kepala_departemen": { "nama": "Rezki Akbar Nugraha", "nim": "124360087", "prodi": "Teknik Materia" },
+      "sekretaris_departemen": { "nama": "Rahma Zahira", "nim": "124350060", "prodi": "Teknologi Pangan" },
+      "divisi": [
+        {
+          "nama_divisi": "Pengembangan Kualitas Mahasiswa",
+          "kepala_divisi": { "nama": "Miftah Bintang Ramadhan", "nim": "124150082", "prodi": "Teknik Geologi" },
+          "staff_popup_data": [
+            { "jabatan": "Staff pengembangan kualitas mahasiswa", "nama": "ANGGARA TRIARISTA", "nim": "125360065", "prodi": "Teknik Material" },
+            { "jabatan": "Staff pengembangan kualitas mahasiswa", "nama": "Quratul Hafidza", "nim": "125220052", "prodi": "Perencanaan Wilayah dan Kota" },
+            { "jabatan": "Staff pengembangan kualitas mahasiswa", "nama": "Dwi Reva Qolbi Rahmayani", "nim": "125120188", "prodi": "Teknik Geofisika" },
+            { "jabatan": "Staff pengembangan kualitas mahasiswa", "nama": "Brian Hidayat", "nim": "125120033", "prodi": "Teknik Geofisika" }
+          ]
+        },
+        {
+          "nama_divisi": "Pengembangan Karakter",
+          "kepala_divisi": { "nama": "Rahmatul Raihan", "nim": "124120029", "prodi": "Teknik Geofisika" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Pengembangan Karakter", "nama": "Alya Zahwa Harnela", "nim": "125150011", "prodi": "teknik geologi" },
+            { "jabatan": "Staff Pengembangan Karakter", "nama": "Nagita Safitri", "nim": "125240019", "prodi": "Arsitektur" },
+            { "jabatan": "Staff Pengembangan Karakter", "nama": "Irvan Hanif", "nim": "125480028", "prodi": "Rekayasa Minyak dan Gas" },
+            { "jabatan": "Staff Pengembangan Karakter", "nama": "Rency Irfandasri", "nim": "125400066", "prodi": "Teknik Telekomunikasi" },
+            { "jabatan": "Staff Pengembangan Karakter", "nama": "Arijal Alfi Syahri", "nim": "1251710016", "prodi": "Teknik Mesin" }
+          ]
+        }
+      ]
+    },
+    {
+      "nama_departemen": "KOMINFO",
+      "kepala_departemen": { "nama": "Nadiva Putri Salsabila", "nim": "124310078", "prodi": "Teknik Biosistem" },
+      "sekretaris_departemen": { "nama": "Agita Nela", "nim": "124250020", "prodi": "Teknik Lingkungan" },
+      "divisi": [
+        {
+          "nama_divisi": "Publikasi dan Dokumentasi",
+          "kepala_divisi": { "nama": "Aqeel Mawla R", "nim": "124390059", "prodi": "Arsitektur Lanskap" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Divisi Medkom", "nama": "Ibnu Kamil Al Amin", "nim": "125220115", "prodi": "Perencanaan Wilayah dan Kota" },
+            { "jabatan": "Staff Divisi Medkom", "nama": "Khairunnisa", "nim": "125340023", "prodi": "Teknik sistem energi" },
+            { "jabatan": "Staff Divisi Medkom", "nama": "Selvi Anggeraini", "nim": "125520033", "prodi": "Pariwisata" }
+          ]
+        },
+        {
+          "nama_divisi": "Desain Kreatif",
+          "kepala_divisi": { "nama": "Awra Hilmi", "nim": "124140048", "prodi": "Teknik Informatika" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Divisi Desain Kreatif", "nama": "Naila Husna", "nim": "125240083", "prodi": "Arsitektur" },
+            { "jabatan": "Staff Divisi Desain Kreatif", "nama": "yahya abdi rahman", "nim": "125390065", "prodi": "arsitektur lanskap" },
+            { "jabatan": "Staff Divisi Desain Kreatif", "nama": "Cantika Ramadhani", "nim": "125230094", "prodi": "Teknik Geomatika" },
+            { "jabatan": "Staff Divisi Desain Kreatif", "nama": "Zahla Utari Taufik", "nim": "125500034", "prodi": "Rekayasa kosmetik" }
+          ]
+        },
+        {
+          "nama_divisi": "Konten Kreatif",
+          "kepala_divisi": { "nama": "Lusiana Maheswari", "nim": "124400092", "prodi": "Teknik Telekomunikasi" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Divisi Medkom Konkref", "nama": "Zahra Salsabila", "nim": "125140177", "prodi": "Teknik Informatika" },
+            { "jabatan": "Staff Divisi Medkom Konkref", "nama": "NABILA DARMA", "nim": "125430032", "prodi": "Teknik Biomedis" },
+            { "jabatan": "Staff Divisi Medkom Konkref", "nama": "Deny Wilastra", "nim": "125140025", "prodi": "Teknik Informatika" }
+          ]
+        }
+      ]
+    },
+    {
+      "nama_departemen": "SENI BUDAYA",
+      "kepala_departemen": { "nama": "Bariq Rizky Mubarak", "nim": "124370129", "prodi": "Teknik Pertambangan" },
+      "sekretaris_departemen": { "nama": "Nurul Shohibah", "nim": "124430001", "prodi": "Teknik Biomedis" },
+      "divisi": [
+        {
+          "nama_divisi": "Musik dan Vokal",
+          "kepala_divisi": { "nama": "Ahmad Hanif", "nim": "124230038", "prodi": "Teknik Geomatika" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Divisi Musik dan Vokal", "nama": "Muhammad Al-Farabi Putra Syahendri", "nim": "125370008", "prodi": "Teknik Pertambangan" },
+            { "jabatan": "Staff Divisi Musik dan Vokal", "nama": "Rizki Aprilian Putra", "nim": "125290012", "prodi": "Sains Atmosfir dan Keplanetan" },
+            { "jabatan": "Staff Divisi Musik dan Vokal", "nama": "Muhammad Abdul Roif", "nim": "125150117", "prodi": "Teknik Geologi" },
+            { "jabatan": "Staff Divisi Musik dan Vokal", "nama": "Muhammad Daffa Addinul Putra", "nim": "125370065", "prodi": "Teknik pertambangan" },
+            { "jabatan": "Staff Divisi Musik dan Vokal", "nama": "Abdul Rafi Afesa", "nim": "125260195", "prodi": "Farmasi" },
+            { "jabatan": "Staff Divisi Musik dan Vokal", "nama": "AIDHILA GUETO RINATA", "nim": "125420022", "prodi": "Rekayasa Kehutanan" }
+          ]
+        },
+        {
+          "nama_divisi": "Seni dan Tari",
+          "kepala_divisi": { "nama": "Viona Nur Aisyah", "nim": "124340033", "prodi": "Teknik Sistem Energi" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Divisi Seni dan Tari", "nama": "miftahul jannah", "nim": "125430012", "prodi": "teknik biomedis" },
+            { "jabatan": "Staff Divisi Seni dan Tari", "nama": "Febrika Aulia", "nim": "125310048", "prodi": "Teknik Biosistem" },
+            { "jabatan": "Staff Divisi Seni dan Tari", "nama": "Adhy Ammara Fayaza", "nim": "125190134", "prodi": "Teknik Industri" },
+            { "jabatan": "Staff Divisi Seni dan Tari", "nama": "Muhammad abdul hakim", "nim": "125360037", "prodi": "t.material" },
+            { "jabatan": "Staff Divisi Seni dan Tari", "nama": "Almalia Putri", "nim": "125310024", "prodi": "Teknik Biosistem" },
+            { "jabatan": "Staff Divisi Seni dan Tari", "nama": "Wiska Lukhfiah Irwani", "nim": "125120022", "prodi": "Teknik Geofisika" },
+            { "jabatan": "Staff Divisi Seni dan Tari", "nama": "Arifa Eka Nurrahma", "nim": "125220166", "prodi": "Perencanaan Wilayah dan Kota" },
+            { "jabatan": "Staff Divisi Seni dan Tari", "nama": "Futiha Rahayu Wulandari", "nim": "125150045", "prodi": "Teknik Geologi" },
+            { "jabatan": "Staff Divisi Seni dan Tari", "nama": "Syurya Husni", "nim": "125190023", "prodi": "Teknik Industri" }
+          ]
+        },
+        {
+          "nama_divisi": "Adat dan Budaya",
+          "kepala_divisi": { "nama": "Nabilla Cindy Aulia", "nim": "124400012", "prodi": "Teknik Telekomunikasi" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Divisi Adat dan Budaya", "nama": "Hadits Wirdatuljannah Syafna", "nim": "125180029", "prodi": "Biologi" },
+            { "jabatan": "Staff Divisi Adat dan Budaya", "nama": "Auza Ramadani", "nim": "125310094", "prodi": "Teknik Biosistem" },
+            { "jabatan": "Staff Divisi Adat dan Budaya", "nama": "Bunga Ramda Ruliesty", "nim": "125430096", "prodi": "Teknik Biomedis" }
+          ]
+        }
+      ]
+    },
+    {
+      "nama_departemen": "ENTREPRENEUR",
+      "kepala_departemen": { "nama": "Hafiz Ainul Fikri", "nim": "124470007", "prodi": "Rekayasa Tata Kelola Air Terpadu" },
+      "sekretaris_departemen": { "nama": "Vidia Ningsih", "nim": "124430004", "prodi": "Teknik Biomedis" },
+      "divisi": [
+        {
+          "nama_divisi": "Manajemen Bisnis",
+          "kepala_divisi": { "nama": "Sonia Avivah", "nim": "124150070", "prodi": "Teknik Geologi" },
+          "staff_popup_data": [
+            { "jabatan": "Staff Divisi Manajemen Bisnis", "nama": "Syaiyatul Husyaini", "nim": "125190001", "prodi": "Teknik Industri" },
+            { "jabatan": "Staff Divisi Manajemen Bisnis", "nama": "M. Farhan Ramadhan", "nim": "125310054", "prodi": "Teknik Biosistem" },
+            { "jabatan": "Staff Divisi Manajemen Bisnis", "nama": "Hanifha Aulia Putri", "nim": "125410076", "prodi": "Sains Aktuaria" },
+            { "jabatan": "Staff Divisi Manajemen Bisnis", "nama": "Salsabila Putri Ayunda", "nim": "125430089", "prodi": "Teknik Biomedis" },
+            { "jabatan": "Staff Divisi Manajemen Bisnis", "nama": "FIKA ARMELIA", "nim": "125230072", "prodi": "TEKNIK GEOMATIKA" },
+            { "jabatan": "Staff Divisi Manajemen Bisnis", "nama": "Intan Nofita Yusni", "nim": "125360114", "prodi": "Teknik Material" },
+            { "jabatan": "Staff Divisi Manajemen Bisnis", "nama": "Dimas Hadi Prasetiyo", "nim": "125480047", "prodi": "Rekayasa Minyak dan Gas" },
+            { "jabatan": "Staff Divisi Manajemen Bisnis", "nama": "M.Fuad Aqil", "nim": "125120174", "prodi": "Teknik Geofisika" }
+          ]
+        },
+        {
+          "nama_divisi": "Digital Marketing",
+          "kepala_divisi": { "nama": "Audina Fitria", "nim": "124450038", "prodi": "Sains Data" },
+          "staff_popup_data": [
+            { "jabatan": "Staf Digital Marketing", "nama": "Ratna Azizah Ismail", "nim": "125140058", "prodi": "Teknik Informatika" },
+            { "jabatan": "Staf Digital Marketing", "nama": "Rizka Yuliatika", "nim": "125310038", "prodi": "Teknik Biosistem" }
+          ]
+        },
+        {
+          "nama_divisi": "Finance",
+          "kepala_divisi": { "nama": "Alya Flora Ramadhani", "nim": "124410113", "prodi": "Sains Aktuaria" },
+          "staff_popup_data": [
+            { "jabatan": "Staff finance", "nama": "Saula Tifa", "nim": "125260039", "prodi": "Farmasi" },
+            { "jabatan": "Staff finance", "nama": "Riva Septia Nanda", "nim": "125450114", "prodi": "Sains Data" }
+          ]
+        }
+      ]
+    }
+  ]
+}
