@@ -11,7 +11,9 @@ import {
   faNewspaper,
   faTrophy,
   faTimes,
-  faUser
+  faUser,
+  faBars,
+  faChevronLeft
 } from '@fortawesome/free-solid-svg-icons'
 import {
   fetchPengurus,
@@ -35,6 +37,10 @@ export default function Dashboard() {
   const [token, setToken] = useState('')
   const [adminUser, setAdminUser] = useState('')
   const [activeTab, setActiveTab] = useState('pengurus') // 'pengurus' | 'berita' | 'prestasi'
+  
+  // Collapse / Drawer States
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   // Data States
   const [pengurusList, setPengurusList] = useState([])
@@ -214,113 +220,232 @@ export default function Dashboard() {
     }
   }
 
-  return (
-    <section className="bg-[#fff9f4] min-h-screen py-10 px-4 md:px-8 text-[#1f1414]">
-      <div className="mx-auto max-w-7xl space-y-8">
-        
-        {/* Header Dashboard */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-[2rem] border border-[#8b0000]/10 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.15)] gap-4">
-          <div>
-            <h1 className="text-3xl font-extrabold text-[#8b0000]">Dashboard Admin</h1>
-            <p className="text-sm text-slate-500 mt-1">
-              Selamat datang kembali, <span className="font-semibold text-[#8b0000]">{adminUser}</span>
-            </p>
+  // Common render helper for Sidebar Inner Contents
+  const renderSidebarContents = (collapsedMode) => {
+    return (
+      <>
+        <div className="space-y-8">
+          {/* Profile Section */}
+          <div className={`flex items-center gap-3 pb-6 border-b border-slate-100 ${collapsedMode ? 'justify-center' : ''}`}>
+            <div className="w-10 h-10 bg-gradient-to-tr from-[#8b0000] to-yellow-500 rounded-full flex items-center justify-center text-white font-bold shadow-md shadow-[#8b0000]/10 shrink-0">
+              <FontAwesomeIcon icon={faUser} className="text-sm" />
+            </div>
+            {!collapsedMode && (
+              <div className="overflow-hidden">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Administrator</p>
+                <p className="text-sm font-black text-[#8b0000] truncate">{adminUser}</p>
+              </div>
+            )}
           </div>
-          <button
-            onClick={handleLogout}
-            className="inline-flex items-center gap-2 rounded-2xl bg-[#8b0000] hover:bg-[#b11919] px-5 py-3 text-sm font-semibold text-white transition focus:outline-none shadow-sm shadow-red-950/10"
-          >
-            <FontAwesomeIcon icon={faSignOutAlt} />
-            Keluar
-          </button>
-        </div>
 
-        {/* Success Alert Banner */}
-        {successMsg && (
-          <div className="rounded-2xl border border-green-200 bg-green-50 px-6 py-4 text-sm font-medium text-green-700 shadow-sm transition">
-            {successMsg}
-          </div>
-        )}
-
-        {/* Error Alert Banner */}
-        {error && (
-          <div className="rounded-2xl border border-red-200 bg-red-50 px-6 py-4 text-sm font-medium text-red-700 shadow-sm transition">
-            Error: {error}
-          </div>
-        )}
-
-        {/* Tab Selector & Add Button */}
-        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center bg-white p-4 rounded-[2rem] border border-[#8b0000]/10 shadow-sm gap-4">
-          <div className="flex flex-wrap gap-2">
+          {/* Navigation Tabs */}
+          <nav className="flex flex-col gap-2">
             {[
               { id: 'pengurus', label: 'BPH & Pengurus', icon: faUsers },
               { id: 'berita', label: 'Berita Terkini', icon: faNewspaper },
               { id: 'prestasi', label: 'Daftar Prestasi', icon: faTrophy }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id)
-                  setError(null)
-                }}
-                className={`inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold rounded-2xl border-2 border-transparent transition focus:outline-none ${
-                  activeTab === tab.id
-                    ? 'marawa-outline-active'
-                    : 'text-slate-600 hover:bg-slate-100 hover:text-[#8b0000]'
-                }`}
-              >
-                <FontAwesomeIcon icon={tab.icon} />
-                {tab.label}
-              </button>
-            ))}
-          </div>
-          <button
-            onClick={handleOpenAdd}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 px-5 py-3 text-sm font-semibold text-white transition focus:outline-none shadow-sm shadow-emerald-950/10"
-          >
-            <FontAwesomeIcon icon={faPlus} />
-            Tambah Data
-          </button>
+            ].map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    setActiveTab(tab.id)
+                    setSearchQuery('')
+                    setError(null)
+                    setIsMobileOpen(false) // Close drawer on mobile click
+                  }}
+                  title={collapsedMode ? tab.label : undefined}
+                  className={`relative w-full flex items-center gap-3 px-4 py-3.5 text-xs font-bold uppercase tracking-wider rounded-2xl transition-all duration-300 ${
+                    collapsedMode ? 'justify-center' : ''
+                  } ${
+                    isActive
+                      ? 'bg-[#8b0000] text-white shadow-[0_8px_20px_-5px_rgba(139,0,0,0.25)]'
+                      : 'text-slate-600 hover:bg-slate-50 hover:text-[#8b0000]'
+                  }`}
+                >
+                  {isActive && (
+                    <span className="absolute left-0 top-1/2 -translate-x-1/2 w-1 h-6 bg-yellow-400 rounded-r-full"></span>
+                  )}
+                  <FontAwesomeIcon icon={tab.icon} className="w-4 h-4 shrink-0" />
+                  {!collapsedMode && <span>{tab.label}</span>}
+                </button>
+              )
+            })}
+          </nav>
         </div>
 
-        {/* Contents Grid */}
-        <div className="bg-white rounded-[2rem] border border-[#8b0000]/10 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.15)] p-6 md:p-8 min-h-[400px]">
-          {loading ? (
-            <LoadingLogo message="Memuat data administrasi..." />
-          ) : (
-            <div className="flex flex-col gap-6">
-              
-              {/* Search Box */}
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder={`Cari data ${activeTab === 'pengurus' ? 'pengurus' : activeTab === 'berita' ? 'berita' : 'prestasi'}...`}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 bg-[#fffbf9] px-5 py-3 text-sm focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] focus:outline-none transition shadow-sm"
-                />
-              </div>
+        {/* Logout & Footer */}
+        <div className="pt-6 border-t border-slate-100 mt-8 md:mt-12">
+          <button
+            onClick={handleLogout}
+            title={collapsedMode ? "Keluar" : undefined}
+            className={`w-full flex items-center gap-3 px-4 py-3.5 text-xs font-bold uppercase tracking-wider rounded-2xl text-white bg-slate-700 hover:bg-[#8b0000] transition-all duration-300 shadow-sm ${
+              collapsedMode ? 'justify-center' : 'justify-center'
+            }`}
+          >
+            <FontAwesomeIcon icon={faSignOutAlt} className="shrink-0" />
+            {!collapsedMode && <span>Keluar</span>}
+          </button>
+        </div>
+      </>
+    )
+  }
 
-              <div className="overflow-x-auto">
+  return (
+    <section className="bg-[#fff9f4] min-h-screen py-10 px-4 md:px-8 text-[#1f1414]">
+      
+      {/* MOBILE DRAWER BACKDROP */}
+      {isMobileOpen && (
+        <div 
+          className="fixed inset-0 bg-[#1f1414]/40 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
+          onClick={() => setIsMobileOpen(false)}
+        ></div>
+      )}
+
+      {/* MOBILE FLOATING DRAWER (SIDEBAR) */}
+      <aside 
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-[#8b0000]/10 p-6 flex flex-col justify-between transform transition-transform duration-300 ease-in-out md:hidden ${
+          isMobileOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="absolute top-4 right-4">
+          <button 
+            onClick={() => setIsMobileOpen(false)}
+            className="text-slate-400 hover:text-[#8b0000] p-1 bg-slate-100 rounded-full"
+          >
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+        </div>
+        {renderSidebarContents(false)}
+      </aside>
+
+      <div className="mx-auto max-w-7xl flex gap-8 relative items-start">
+        
+        {/* DESKTOP COLLAPSIBLE SIDEBAR */}
+        <aside 
+          className={`hidden md:flex flex-col justify-between bg-white border border-[#8b0000]/10 rounded-[2rem] p-6 shadow-[0_15px_40px_rgba(0,0,0,0.03)] shrink-0 transition-all duration-300 sticky top-24 ${
+            isSidebarCollapsed ? 'w-24' : 'w-64'
+          }`}
+          style={{ minHeight: '500px' }}
+        >
+          {renderSidebarContents(isSidebarCollapsed)}
+        </aside>
+
+        {/* MAIN CONTENT AREA */}
+        <div className="flex-1 space-y-6 w-full min-w-0">
+          
+          {/* Header Action Banner with Toggle Button */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-6 rounded-[2rem] border border-[#8b0000]/10 shadow-[0_15px_40px_-20px_rgba(0,0,0,0.1)] gap-4">
+            <div className="flex items-center gap-4 w-full sm:w-auto">
+              {/* Sidebar toggle button */}
+              <button
+                onClick={() => {
+                  if (window.innerWidth < 768) {
+                    setIsMobileOpen(prev => !prev);
+                  } else {
+                    setIsSidebarCollapsed(prev => !prev);
+                  }
+                }}
+                className="p-3 bg-slate-100 hover:bg-[#8b0000]/10 text-slate-600 hover:text-[#8b0000] rounded-xl transition duration-300 focus:outline-none shrink-0"
+                title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+              >
+                <FontAwesomeIcon icon={faBars} />
+              </button>
+              
+              <div className="truncate">
+                <h1 className="text-xl sm:text-2xl font-black text-[#8b0000] truncate">Dashboard Admin</h1>
+                <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5 truncate">
+                  Mengelola data <span className="font-semibold text-[#8b0000] uppercase">{activeTab === 'pengurus' ? 'BPH & Pengurus' : activeTab === 'berita' ? 'Berita Terkini' : 'Daftar Prestasi'}</span>
+                </p>
+              </div>
+            </div>
+            
+            <button
+              onClick={handleOpenAdd}
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 px-5 py-3 text-sm font-semibold text-white transition focus:outline-none shadow-sm shadow-emerald-950/10 w-full sm:w-auto shrink-0"
+            >
+              <FontAwesomeIcon icon={faPlus} />
+              Tambah Data
+            </button>
+          </div>
+
+          {/* Success Alert Banner */}
+          {successMsg && (
+            <div className="rounded-2xl border border-green-200 bg-green-50 px-6 py-4 text-sm font-medium text-green-700 shadow-sm transition">
+              {successMsg}
+            </div>
+          )}
+
+          {/* Error Alert Banner */}
+          {error && (
+            <div className="rounded-2xl border border-red-200 bg-red-50 px-6 py-4 text-sm font-medium text-red-700 shadow-sm transition">
+              Error: {error}
+            </div>
+          )}
+
+          {/* Table Container */}
+          <div className="bg-white rounded-[2rem] border border-[#8b0000]/10 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.15)] p-6 md:p-8 min-h-[400px]">
+            {loading ? (
+              <LoadingLogo message="Memuat data administrasi..." />
+            ) : (
+              <div className="flex flex-col gap-6">
                 
-                {/* --- PENGURUS TABLE --- */}
-                {activeTab === 'pengurus' && (
-                  <table className="w-full text-left border-collapse min-w-[600px]">
-                    <thead>
-                      <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
-                        <th className="py-4 px-4">Nama</th>
-                        <th className="py-4 px-4">Jabatan</th>
-                        <th className="py-4 px-4">NIM/NIP</th>
-                        <th className="py-4 px-4">Prodi</th>
-                        <th className="py-4 px-4">Departemen</th>
-                        <th className="py-4 px-4">Periode</th>
-                        <th className="py-4 px-4">Deskripsi</th>
-                        <th className="py-4 px-4 text-center">Aksi</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 text-sm">
-                      {pengurusList
-                        .filter(member => 
+                {/* Search Box */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder={`Cari data ${activeTab === 'pengurus' ? 'pengurus' : activeTab === 'berita' ? 'berita' : 'prestasi'}...`}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full rounded-2xl border border-slate-200 bg-[#fffbf9] px-5 py-3 text-sm focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] focus:outline-none transition shadow-sm"
+                  />
+                </div>
+
+                <div className="overflow-x-auto">
+                  
+                  {/* --- PENGURUS TABLE --- */}
+                  {activeTab === 'pengurus' && (
+                    <table className="w-full text-left border-collapse min-w-[600px]">
+                      <thead>
+                        <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
+                          <th className="py-4 px-4">Nama</th>
+                          <th className="py-4 px-4">Jabatan</th>
+                          <th className="py-4 px-4">NIM/NIP</th>
+                          <th className="py-4 px-4">Prodi</th>
+                          <th className="py-4 px-4">Departemen</th>
+                          <th className="py-4 px-4">Periode</th>
+                          <th className="py-4 px-4">Deskripsi</th>
+                          <th className="py-4 px-4 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-sm">
+                        {pengurusList
+                          .filter(member => 
+                            member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            (member.periode || '2025/2026').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            (member.nim_nip || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            (member.prodi || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            (member.departemen || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            member.description.toLowerCase().includes(searchQuery.toLowerCase())
+                          )
+                          .map(member => (
+                            <tr key={member.id} className="hover:bg-slate-50 transition">
+                              <td className="py-4 px-4 font-semibold text-slate-800">{member.name}</td>
+                              <td className="py-4 px-4"><span className="rounded-full bg-[#fff2ef] border border-[#8b0000]/15 px-3 py-1 text-xs text-[#8b0000] font-medium">{member.role}</span></td>
+                              <td className="py-4 px-4 text-slate-600">{member.nim_nip || '-'}</td>
+                              <td className="py-4 px-4 text-slate-600">{member.prodi || 'Teknik Material'}</td>
+                              <td className="py-4 px-4 text-slate-600"><span className="rounded-full bg-slate-100 border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600">{member.departemen || '-'}</span></td>
+                              <td className="py-4 px-4"><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">{member.periode || '2025/2026'}</span></td>
+                              <td className="py-4 px-4 text-slate-600 max-w-xs truncate">{member.description}</td>
+                              <td className="py-4 px-4 text-center space-x-2">
+                                <button onClick={() => handleOpenEdit('pengurus', member)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
+                                <button onClick={() => handleDelete('pengurus', member.id)} className="p-2 text-slate-500 hover:text-red-600 transition" title="Delete"><FontAwesomeIcon icon={faTrash} /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        {pengurusList.filter(member => 
                           member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           (member.periode || '2025/2026').toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -328,132 +453,109 @@ export default function Dashboard() {
                           (member.prodi || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                           (member.departemen || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                           member.description.toLowerCase().includes(searchQuery.toLowerCase())
-                        )
-                        .map(member => (
-                          <tr key={member.id} className="hover:bg-slate-50 transition">
-                            <td className="py-4 px-4 font-semibold text-slate-800">{member.name}</td>
-                            <td className="py-4 px-4"><span className="rounded-full bg-[#fff2ef] border border-[#8b0000]/15 px-3 py-1 text-xs text-[#8b0000] font-medium">{member.role}</span></td>
-                            <td className="py-4 px-4 text-slate-600">{member.nim_nip || '-'}</td>
-                            <td className="py-4 px-4 text-slate-600">{member.prodi || 'Teknik Material'}</td>
-                            <td className="py-4 px-4 text-slate-600"><span className="rounded-full bg-slate-100 border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600">{member.departemen || '-'}</span></td>
-                            <td className="py-4 px-4"><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">{member.periode || '2025/2026'}</span></td>
-                            <td className="py-4 px-4 text-slate-600 max-w-xs truncate">{member.description}</td>
-                            <td className="py-4 px-4 text-center space-x-2">
-                              <button onClick={() => handleOpenEdit('pengurus', member)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
-                              <button onClick={() => handleDelete('pengurus', member.id)} className="p-2 text-slate-500 hover:text-red-600 transition" title="Delete"><FontAwesomeIcon icon={faTrash} /></button>
-                            </td>
+                        ).length === 0 && (
+                          <tr>
+                            <td colSpan="8" className="py-8 text-center text-slate-500">Tidak ada pengurus yang cocok.</td>
                           </tr>
-                        ))}
-                      {pengurusList.filter(member => 
-                        member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        (member.periode || '2025/2026').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        (member.nim_nip || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        (member.prodi || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        (member.departemen || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        member.description.toLowerCase().includes(searchQuery.toLowerCase())
-                      ).length === 0 && (
-                        <tr>
-                          <td colSpan="8" className="py-8 text-center text-slate-500">Tidak ada pengurus yang cocok.</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                )}
+                        )}
+                      </tbody>
+                    </table>
+                  )}
 
-                {/* --- BERITA TABLE --- */}
-                {activeTab === 'berita' && (
-                  <table className="w-full text-left border-collapse min-w-[600px]">
-                    <thead>
-                      <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
-                        <th className="py-4 px-4 w-28">Sampul</th>
-                        <th className="py-4 px-4">Judul</th>
-                        <th className="py-4 px-4">Tanggal</th>
-                        <th className="py-4 px-4">Konten</th>
-                        <th className="py-4 px-4 text-center">Aksi</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 text-sm">
-                      {beritaList
-                        .filter(article => 
+                  {/* --- BERITA TABLE --- */}
+                  {activeTab === 'berita' && (
+                    <table className="w-full text-left border-collapse min-w-[600px]">
+                      <thead>
+                        <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
+                          <th className="py-4 px-4 w-28">Sampul</th>
+                          <th className="py-4 px-4">Judul</th>
+                          <th className="py-4 px-4">Tanggal</th>
+                          <th className="py-4 px-4">Konten</th>
+                          <th className="py-4 px-4 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-sm">
+                        {beritaList
+                          .filter(article => 
+                            article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            article.content.toLowerCase().includes(searchQuery.toLowerCase())
+                          )
+                          .map(article => (
+                            <tr key={article.id} className="hover:bg-slate-50 transition">
+                              <td className="py-4 px-4">
+                                {article.image ? (
+                                  <img src={article.image} alt={article.title} className="h-10 w-16 object-cover rounded-lg border border-slate-200 shadow-sm" />
+                                ) : (
+                                  <div className="h-10 w-16 bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center text-[10px] text-slate-400">No Image</div>
+                                )}
+                              </td>
+                              <td className="py-4 px-4 font-semibold text-slate-800">{article.title}</td>
+                              <td className="py-4 px-4 text-slate-500">{article.date}</td>
+                              <td className="py-4 px-4 text-slate-600 max-w-sm truncate">{article.content}</td>
+                              <td className="py-4 px-4 text-center space-x-2">
+                                <button onClick={() => handleOpenEdit('berita', article)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
+                                <button onClick={() => handleDelete('berita', article.id)} className="p-2 text-slate-500 hover:text-red-600 transition" title="Delete"><FontAwesomeIcon icon={faTrash} /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        {beritaList.filter(article => 
                           article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           article.content.toLowerCase().includes(searchQuery.toLowerCase())
-                        )
-                        .map(article => (
-                          <tr key={article.id} className="hover:bg-slate-50 transition">
-                            <td className="py-4 px-4">
-                              {article.image ? (
-                                <img src={article.image} alt={article.title} className="h-10 w-16 object-cover rounded-lg border border-slate-200 shadow-sm" />
-                              ) : (
-                                <div className="h-10 w-16 bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center text-[10px] text-slate-400">No Image</div>
-                              )}
-                            </td>
-                            <td className="py-4 px-4 font-semibold text-slate-800">{article.title}</td>
-                            <td className="py-4 px-4 text-slate-500">{article.date}</td>
-                            <td className="py-4 px-4 text-slate-600 max-w-sm truncate">{article.content}</td>
-                            <td className="py-4 px-4 text-center space-x-2">
-                              <button onClick={() => handleOpenEdit('berita', article)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
-                              <button onClick={() => handleDelete('berita', article.id)} className="p-2 text-slate-500 hover:text-red-600 transition" title="Delete"><FontAwesomeIcon icon={faTrash} /></button>
-                            </td>
+                        ).length === 0 && (
+                          <tr>
+                            <td colSpan="5" className="py-8 text-center text-slate-500">Tidak ada berita yang cocok.</td>
                           </tr>
-                        ))}
-                      {beritaList.filter(article => 
-                        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        article.content.toLowerCase().includes(searchQuery.toLowerCase())
-                      ).length === 0 && (
-                        <tr>
-                          <td colSpan="5" className="py-8 text-center text-slate-500">Tidak ada berita yang cocok.</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                )}
+                        )}
+                      </tbody>
+                    </table>
+                  )}
 
-                {/* --- PRESTASI TABLE --- */}
-                {activeTab === 'prestasi' && (
-                  <table className="w-full text-left border-collapse min-w-[600px]">
-                    <thead>
-                      <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
-                        <th className="py-4 px-4">Judul Prestasi</th>
-                        <th className="py-4 px-4">Tahun</th>
-                        <th className="py-4 px-4">Deskripsi</th>
-                        <th className="py-4 px-4 text-center">Aksi</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 text-sm">
-                      {prestasiList
-                        .filter(achievement => 
+                  {/* --- PRESTASI TABLE --- */}
+                  {activeTab === 'prestasi' && (
+                    <table className="w-full text-left border-collapse min-w-[600px]">
+                      <thead>
+                        <tr className="border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
+                          <th className="py-4 px-4">Judul Prestasi</th>
+                          <th className="py-4 px-4">Tahun</th>
+                          <th className="py-4 px-4">Deskripsi</th>
+                          <th className="py-4 px-4 text-center">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-sm">
+                        {prestasiList
+                          .filter(achievement => 
+                            achievement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            achievement.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            achievement.year.toString().includes(searchQuery)
+                          )
+                          .map(achievement => (
+                            <tr key={achievement.id} className="hover:bg-slate-50 transition">
+                              <td className="py-4 px-4 font-semibold text-slate-800">{achievement.title}</td>
+                              <td className="py-4 px-4"><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold">{achievement.year}</span></td>
+                              <td className="py-4 px-4 text-slate-600 max-w-sm truncate">{achievement.description}</td>
+                              <td className="py-4 px-4 text-center space-x-2">
+                                <button onClick={() => handleOpenEdit('prestasi', achievement)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
+                                <button onClick={() => handleDelete('prestasi', achievement.id)} className="p-2 text-slate-500 hover:text-red-600 transition" title="Delete"><FontAwesomeIcon icon={faTrash} /></button>
+                              </td>
+                            </tr>
+                          ))}
+                        {prestasiList.filter(achievement => 
                           achievement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           achievement.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           achievement.year.toString().includes(searchQuery)
-                        )
-                        .map(achievement => (
-                          <tr key={achievement.id} className="hover:bg-slate-50 transition">
-                            <td className="py-4 px-4 font-semibold text-slate-800">{achievement.title}</td>
-                            <td className="py-4 px-4"><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold">{achievement.year}</span></td>
-                            <td className="py-4 px-4 text-slate-600 max-w-sm truncate">{achievement.description}</td>
-                            <td className="py-4 px-4 text-center space-x-2">
-                              <button onClick={() => handleOpenEdit('prestasi', achievement)} className="p-2 text-slate-500 hover:text-blue-600 transition" title="Edit"><FontAwesomeIcon icon={faEdit} /></button>
-                              <button onClick={() => handleDelete('prestasi', achievement.id)} className="p-2 text-slate-500 hover:text-red-600 transition" title="Delete"><FontAwesomeIcon icon={faTrash} /></button>
-                            </td>
+                        ).length === 0 && (
+                          <tr>
+                            <td colSpan="4" className="py-8 text-center text-slate-500">Tidak ada prestasi yang cocok.</td>
                           </tr>
-                        ))}
-                      {prestasiList.filter(achievement => 
-                        achievement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        achievement.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        achievement.year.toString().includes(searchQuery)
-                      ).length === 0 && (
-                        <tr>
-                          <td colSpan="4" className="py-8 text-center text-slate-500">Tidak ada prestasi yang cocok.</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                )}
+                        )}
+                      </tbody>
+                    </table>
+                  )}
 
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 
