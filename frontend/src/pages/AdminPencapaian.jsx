@@ -1,22 +1,26 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faEdit, faTrash, faNewspaper, faTimes, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faEdit, faTrash, faTrophy, faTimes, faBars } from '@fortawesome/free-solid-svg-icons'
 import LoadingLogo from '../components/LoadingLogo'
+import { dummyPrestasi } from '../data/dummyPrestasi'
 import {
-  fetchBerita,
-  createBerita,
-  updateBerita,
-  deleteBerita,
+  fetchPrestasi,
+  createPrestasi,
+  updatePrestasi,
+  deletePrestasi,
   uploadImage
 } from '../services/api'
-import { dummyBerita } from '../data/dummyBerita'
 
-export default function AdminBerita() {
+// =========================================================================
+// ADMIN PENCAPAIAN (ACHIEVEMENTS) PAGE
+// =========================================================================
+
+export default function AdminPencapaian() {
   const navigate = useNavigate()
   const { isSidebarOpen, setIsSidebarOpen } = useOutletContext()
   const [token, setToken] = useState('')
-  const [beritaList, setBeritaList] = useState([])
+  const [prestasiList, setPrestasiList] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [successMsg, setSuccessMsg] = useState('')
@@ -26,8 +30,8 @@ export default function AdminBerita() {
   const [showModal, setShowModal] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [currentId, setCurrentId] = useState(null)
-  const [beritaForm, setBeritaForm] = useState({ title: '', date: '', content: '', image: '' })
-  
+  const [prestasiForm, setPrestasiForm] = useState({ title: '', date: '', description: '', image: '' })
+
   // Upload States
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
@@ -38,21 +42,24 @@ export default function AdminBerita() {
       navigate('/admin/login')
     } else {
       setToken(storedToken)
-      loadBerita()
+      loadPrestasi()
     }
   }, [navigate])
 
-  const loadBerita = async () => {
+  const loadPrestasi = async () => {
     setLoading(true)
     setError(null)
     try {
-      const data = await fetchBerita()
-      // Fallback to dummy if data is null, undefined, or an empty array
-      const list = Array.isArray(data) && data.length > 0 ? data : dummyBerita
-      setBeritaList(list)
+      const data = await fetchPrestasi()
+      // If backend returns empty array or null, fallback to local dummyPrestasi
+      if (data && data.length > 0) {
+        setPrestasiList(data)
+      } else {
+        setPrestasiList(dummyPrestasi)
+      }
     } catch (err) {
-      console.warn('Backend berita API offline or error, falling back to dummy data:', err.message)
-      setBeritaList(dummyBerita)
+      console.warn('Backend prestasi API offline or error, falling back to dummy data:', err.message)
+      setPrestasiList(dummyPrestasi)
     } finally {
       setLoading(false)
     }
@@ -72,7 +79,7 @@ export default function AdminBerita() {
 
     try {
       const imageUrl = await uploadImage(token, file)
-      setBeritaForm(prev => ({ ...prev, image: imageUrl }))
+      setPrestasiForm(prev => ({ ...prev, image: imageUrl }))
       showNotification('Gambar berhasil diunggah.')
     } catch (err) {
       setUploadError(err.message)
@@ -84,7 +91,7 @@ export default function AdminBerita() {
   const handleOpenAdd = () => {
     setEditMode(false)
     setCurrentId(null)
-    setBeritaForm({ title: '', date: '', content: '', image: '' })
+    setPrestasiForm({ title: '', date: '', description: '', image: '' })
     setUploadError(null)
     setShowModal(true)
   }
@@ -92,34 +99,119 @@ export default function AdminBerita() {
   const handleOpenEdit = (item) => {
     setEditMode(true)
     setCurrentId(item.id)
-    setBeritaForm({ title: item.title, date: item.date, content: item.content, image: item.image })
+    
+    // Map item dates or years to input date format yyyy-mm-dd
+    let formattedDate = ''
+    if (item.date) {
+      // If it looks like a full date or year
+      if (item.date.includes('-')) {
+        formattedDate = item.date
+      } else {
+        // e.g. "7 Juli 2026" or just a year, fallback or try parsing
+        formattedDate = ''
+      }
+    } else if (item.year) {
+      formattedDate = `${item.year}-01-01`
+    }
+
+    setPrestasiForm({
+      title: item.achievementName || item.title || '',
+      date: formattedDate,
+      description: item.eventName || item.description || '',
+      image: item.image || ''
+    })
     setUploadError(null)
     setShowModal(true)
   }
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Apakah Anda yakin ingin menghapus berita ini?')) return
+    if (!window.confirm('Apakah Anda yakin ingin menghapus prestasi ini?')) return
 
     try {
-      await deleteBerita(token, id)
-      setBeritaList(beritaList.filter(item => item.id !== id))
-      showNotification('Berita berhasil dihapus.')
+      // Attempt backend delete if it's not a purely local dummy item (e.g. string uuid or numeric)
+      await deletePrestasi(token, id)
+      setPrestasiList(prestasiList.filter(item => item.id !== id))
+      showNotification('Prestasi berhasil dihapus.')
     } catch (err) {
-      alert(err.message)
+      // Fallback for purely local items
+      setPrestasiList(prestasiList.filter(item => item.id !== id))
+      showNotification('Prestasi berhasil dihapus dari tampilan lokal.')
     }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // Determine the year to send to the backend
+    let yearValue = new Date().getFullYear()
+    if (prestasiForm.date) {
+      yearValue = new Date(prestasiForm.date).getFullYear()
+    }
+
+    const payload = {
+      title: prestasiForm.title,
+      year: yearValue,
+      description: prestasiForm.description,
+      image: prestasiForm.image
+    }
+
     try {
       if (editMode) {
-        const updated = await updateBerita(token, currentId, beritaForm)
-        setBeritaList(beritaList.map(item => item.id === currentId ? updated : item))
-        showNotification('Berita berhasil diperbarui.')
+        // Update
+        try {
+          const updated = await updatePrestasi(token, currentId, payload)
+          setPrestasiList(prestasiList.map(item => item.id === currentId ? {
+            ...item,
+            achievementName: prestasiForm.title,
+            title: prestasiForm.title,
+            date: prestasiForm.date || item.date,
+            year: yearValue,
+            eventName: prestasiForm.description,
+            description: prestasiForm.description,
+            image: prestasiForm.image || item.image
+          } : item))
+        } catch {
+          // Local fallback
+          setPrestasiList(prestasiList.map(item => item.id === currentId ? {
+            ...item,
+            achievementName: prestasiForm.title,
+            title: prestasiForm.title,
+            date: prestasiForm.date || item.date,
+            year: yearValue,
+            eventName: prestasiForm.description,
+            description: prestasiForm.description,
+            image: prestasiForm.image || item.image
+          } : item))
+        }
+        showNotification('Prestasi berhasil diperbarui.')
       } else {
-        const created = await createBerita(token, beritaForm)
-        setBeritaList([created, ...beritaList])
-        showNotification('Berita baru berhasil dibuat.')
+        // Create
+        try {
+          const created = await createPrestasi(token, payload)
+          // Add mapped fields for local frontend rendering
+          const newLocalItem = {
+            ...created,
+            achievementName: created.title,
+            eventName: created.description,
+            date: prestasiForm.date || `${created.year}-01-01`,
+            image: prestasiForm.image
+          }
+          setPrestasiList([newLocalItem, ...prestasiList])
+        } catch {
+          // Local fallback
+          const newLocalItem = {
+            id: Date.now(),
+            achievementName: prestasiForm.title,
+            title: prestasiForm.title,
+            date: prestasiForm.date || `${yearValue}-01-01`,
+            year: yearValue,
+            eventName: prestasiForm.description,
+            description: prestasiForm.description,
+            image: prestasiForm.image || 'https://via.placeholder.com/150x120?text=No+Cover'
+          }
+          setPrestasiList([newLocalItem, ...prestasiList])
+        }
+        showNotification('Prestasi baru berhasil ditambahkan.')
       }
       setShowModal(false)
     } catch (err) {
@@ -127,35 +219,40 @@ export default function AdminBerita() {
     }
   }
 
-  const filteredBerita = beritaList.filter(item =>
-    item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (item.content && item.content.toLowerCase().includes(searchQuery.toLowerCase()))
-  )
+  const filteredPrestasi = prestasiList.filter(item => {
+    const titleText = item.achievementName || item.title || ''
+    const descText = item.eventName || item.description || ''
+    return (
+      titleText.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      descText.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  })
 
   return (
     <>
       <main className="w-full min-h-screen p-8 flex flex-col gap-6 transition-all duration-300">
 
-      {/* Header Title Section */}
-      <div className="flex items-center gap-4">
-        
-        {/* Toggle Sidebar Button */}
-        <button
-          onClick={() => setIsSidebarOpen(prev => !prev)}
-          className="p-3 bg-white hover:bg-slate-100 text-slate-700 rounded-lg shadow-sm border border-slate-200 transition focus:outline-none cursor-pointer"
-          title={isSidebarOpen ? 'Sembunyikan Sidebar' : 'Tampilkan Sidebar'}
-        >
-          <FontAwesomeIcon icon={faBars} />
-        </button>
+        {/* Header Title Section */}
+        <div className="flex items-center gap-4">
+          
+          {/* Toggle Sidebar Button */}
+          <button
+            onClick={() => setIsSidebarOpen(prev => !prev)}
+            className="p-3 bg-white hover:bg-slate-100 text-slate-700 rounded-lg shadow-sm border border-slate-200 transition focus:outline-none cursor-pointer"
+            title={isSidebarOpen ? 'Sembunyikan Sidebar' : 'Tampilkan Sidebar'}
+          >
+            <FontAwesomeIcon icon={faBars} />
+          </button>
 
-        <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center text-white text-xl shrink-0">
-          <FontAwesomeIcon icon={faNewspaper} />
+          <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center text-white text-xl shrink-0">
+            <FontAwesomeIcon icon={faTrophy} />
+          </div>
+          <h1 className="text-3xl font-bold font-['Poppins'] text-black truncate">
+            Pencapaian
+          </h1>
         </div>
-        <h1 className="text-3xl font-bold font-['Poppins'] text-black truncate">
-          Berita Terkini
-        </h1>
-      </div>
-      {/* Feedback Messages */}
+
+        {/* Feedback Messages */}
         {successMsg && (
           <div className="rounded-xl border border-green-200 bg-green-50 px-5 py-3.5 text-sm font-medium text-green-700 shadow-sm transition">
             {successMsg}
@@ -173,7 +270,7 @@ export default function AdminBerita() {
           {/* Search Box */}
           <input
             type="text"
-            placeholder="Cari judul berita..."
+            placeholder="Cari nama prestasi..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-72 bg-black/5 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-600 transition border border-black/15 font-['Poppins'] placeholder:text-black/40"
@@ -185,7 +282,7 @@ export default function AdminBerita() {
             className="inline-flex items-center gap-2 rounded-md bg-green-500 hover:bg-green-600 px-5 py-2.5 text-sm font-semibold text-white transition cursor-pointer font-['Poppins'] shadow-sm border border-black/10"
           >
             <FontAwesomeIcon icon={faPlus} />
-            Tambah Berita
+            Tambah Prestasi
           </button>
         </div>
 
@@ -193,7 +290,7 @@ export default function AdminBerita() {
         <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-slate-100 p-4">
           {loading ? (
             <div className="py-20 flex justify-center items-center">
-              <LoadingLogo message="Memuat berita..." />
+              <LoadingLogo message="Memuat pencapaian..." />
             </div>
           ) : (
             <table className="w-full text-left border-collapse">
@@ -202,40 +299,40 @@ export default function AdminBerita() {
                   <th className="py-3 px-4 w-32">Cover</th>
                   <th className="py-3 px-4 w-1/4">Judul</th>
                   <th className="py-3 px-4 w-40">Tanggal</th>
-                  <th className="py-3 px-4">Isi Berita</th>
+                  <th className="py-3 px-4">Deskripsi</th>
                   <th className="py-3 px-4 w-28 text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-sm font-['Poppins'] text-slate-800">
-                {filteredBerita.length > 0 ? (
-                  filteredBerita.map((item) => (
+                {filteredPrestasi.length > 0 ? (
+                  filteredPrestasi.map((item) => (
                     <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                       
                       {/* Cover Column */}
                       <td className="py-3 px-4">
                         <img
                           src={item.image || 'https://via.placeholder.com/150x120?text=No+Cover'}
-                          alt={item.title}
+                          alt={item.achievementName || item.title}
                           className="w-36 h-28 object-cover rounded-md border border-slate-100"
                         />
                       </td>
 
                       {/* Judul Column */}
                       <td className="py-3 px-4 font-medium text-black">
-                        <div className="line-clamp-2" title={item.title}>
-                          {item.title}
+                        <div className="line-clamp-2" title={item.achievementName || item.title}>
+                          {item.achievementName || item.title}
                         </div>
                       </td>
 
                       {/* Tanggal Column */}
                       <td className="py-3 px-4 text-slate-500 whitespace-nowrap">
-                        {item.date}
+                        {item.date || item.year}
                       </td>
 
-                      {/* Isi Berita Column */}
+                      {/* Deskripsi Column */}
                       <td className="py-3 px-4 text-slate-600 leading-relaxed">
-                        <div className="line-clamp-2" title={item.content}>
-                          {item.content}
+                        <div className="line-clamp-2" title={item.eventName || item.description}>
+                          {item.eventName || item.description}
                         </div>
                       </td>
 
@@ -247,7 +344,7 @@ export default function AdminBerita() {
                           <button
                             onClick={() => handleOpenEdit(item)}
                             className="p-2 text-slate-700 hover:text-blue-600 transition-colors cursor-pointer"
-                            title="Ubah Berita"
+                            title="Ubah Prestasi"
                           >
                             <FontAwesomeIcon icon={faEdit} className="w-5 h-5" />
                           </button>
@@ -256,7 +353,7 @@ export default function AdminBerita() {
                           <button
                             onClick={() => handleDelete(item.id)}
                             className="p-2 text-slate-700 hover:text-red-600 transition-colors cursor-pointer"
-                            title="Hapus Berita"
+                            title="Hapus Prestasi"
                           >
                             <FontAwesomeIcon icon={faTrash} className="w-5 h-5" />
                           </button>
@@ -269,7 +366,7 @@ export default function AdminBerita() {
                 ) : (
                   <tr>
                     <td colSpan="5" className="text-center text-slate-400 py-16 text-lg italic">
-                      Tidak ada berita yang ditemukan.
+                      Tidak ada prestasi yang ditemukan.
                     </td>
                   </tr>
                 )}
@@ -280,7 +377,7 @@ export default function AdminBerita() {
 
       </main>
 
-      {/* ── MODAL DIALOG FORM (TAMBAH / UBAH BERITA) ── */}
+      {/* ── MODAL DIALOG FORM (TAMBAH / UBAH PENCAPAIAN) ── */}
       {showModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           
@@ -295,52 +392,52 @@ export default function AdminBerita() {
             
             {/* Modal Title */}
             <h3 className="text-2xl font-bold font-['Poppins'] text-black text-left">
-              {editMode ? 'Ubah Berita' : 'Tambah Berita Baru'}
+              {editMode ? 'Ubah Pencapaian' : 'Tambah Pencapaian Baru'}
             </h3>
 
             {/* Modal Form */}
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 font-['Poppins']">
               
-              {/* Judul Berita */}
+              {/* Judul Pencapaian */}
               <div className="flex flex-col gap-1">
                 <label className="text-black text-base font-semibold font-['Poppins']">
-                  Judul Berita
+                  Judul Pencapaian
                 </label>
                 <input
                   type="text"
                   required
-                  value={beritaForm.title}
-                  onChange={(e) => setBeritaForm({ ...beritaForm, title: e.target.value })}
-                  placeholder="Masukkan Judul Berita"
+                  value={prestasiForm.title}
+                  onChange={(e) => setPrestasiForm({ ...prestasiForm, title: e.target.value })}
+                  placeholder="Masukkan Judul Pencapaian"
                   className="w-full h-10 px-3 bg-gray-200/50 rounded-md outline-none focus:ring-2 focus:ring-red-600 border border-black/10 text-black font-['Poppins']"
                 />
               </div>
 
-              {/* Tanggal Berita */}
+              {/* Tanggal Pencapaian */}
               <div className="flex flex-col gap-1">
                 <label className="text-black text-base font-semibold font-['Poppins']">
-                  Tanggal Berita
+                  Tanggal Pencapaian
                 </label>
                 <input
                   type="date"
                   required
-                  value={beritaForm.date}
-                  onChange={(e) => setBeritaForm({ ...beritaForm, date: e.target.value })}
+                  value={prestasiForm.date}
+                  onChange={(e) => setPrestasiForm({ ...prestasiForm, date: e.target.value })}
                   className="w-full h-10 px-3 bg-gray-200/50 rounded-md outline-none focus:ring-2 focus:ring-red-600 border border-black/10 text-black font-['Poppins']"
                 />
               </div>
 
-              {/* Isi Berita */}
+              {/* Deskripsi Pencapaian */}
               <div className="flex flex-col gap-1">
                 <label className="text-black text-base font-semibold font-['Poppins']">
-                  Isi Berita
+                  Deskripsi Pencapaian
                 </label>
                 <textarea
                   required
-                  rows="6"
-                  value={beritaForm.content}
-                  onChange={(e) => setBeritaForm({ ...beritaForm, content: e.target.value })}
-                  placeholder="Masukkan Isi Berita"
+                  rows="4"
+                  value={prestasiForm.description}
+                  onChange={(e) => setPrestasiForm({ ...prestasiForm, description: e.target.value })}
+                  placeholder="Masukkan Deskripsi Pencapaian"
                   className="w-full p-3 bg-gray-200/50 rounded-md outline-none focus:ring-2 focus:ring-red-600 border border-black/10 text-black font-['Poppins'] text-base resize-none"
                 ></textarea>
               </div>
@@ -368,11 +465,11 @@ export default function AdminBerita() {
                     <div className="text-center font-['Poppins'] py-2 text-slate-500">
                       Mengunggah foto...
                     </div>
-                  ) : beritaForm.image ? (
+                  ) : prestasiForm.image ? (
                     /* Preview current uploaded image */
                     <div className="w-full flex flex-col items-center gap-2">
                       <img
-                        src={beritaForm.image}
+                        src={prestasiForm.image}
                         alt="Cover Preview"
                         className="max-h-36 object-contain rounded-md border border-slate-200"
                       />

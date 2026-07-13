@@ -12,6 +12,8 @@ import Pengurus from './pages/Pengurus'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import AdminBerita from './pages/AdminBerita'
+import AdminPencapaian from './pages/AdminPencapaian'
+import AdminPengurus from './pages/AdminPengurus'
 import AdminLayout from './components/AdminLayout'
 
 function App() {
@@ -40,6 +42,8 @@ function App() {
         <Route path="admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Navigate to="/admin/berita" replace />} />
           <Route path="berita" element={<AdminBerita />} />
+          <Route path="prestasi" element={<AdminPencapaian />} />
+          <Route path="pengurus" element={<AdminPengurus />} />
         </Route>
       </Routes>
     </BrowserRouter>

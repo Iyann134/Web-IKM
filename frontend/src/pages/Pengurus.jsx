@@ -17,9 +17,9 @@ async function fetchStrukturOrg() {
     )
     if (!res.ok) throw new Error('not ok')
     const json = await res.json()
-    return json?.data?.image_url || null
+    return json?.data?.image_url || localStorage.getItem('strukturOrgUrl') || null
   } catch {
-    return null
+    return localStorage.getItem('strukturOrgUrl') || null
   }
 }
 

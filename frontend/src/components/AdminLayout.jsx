@@ -1,14 +1,27 @@
-import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
 import AdminSidebar from './AdminSidebar'
 
 // =========================================================================
 // ADMIN LAYOUT COMPONENT
 // Manages the collapsible sidebar state and wraps admin outlet pages.
+// Includes global authentication check.
 // =========================================================================
 
 export default function AdminLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const navigate = useNavigate()
+  const token = localStorage.getItem('adminToken')
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/admin/login')
+    }
+  }, [token, navigate])
+
+  if (!token) {
+    return null
+  }
 
   return (
     <div className="flex min-h-screen bg-orange-50 overflow-x-hidden">

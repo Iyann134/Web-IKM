@@ -14,7 +14,10 @@ export default function AdminSidebar({ isOpen, setIsOpen }) {
     if (window.confirm('Apakah Anda yakin ingin keluar?')) {
       localStorage.removeItem('adminToken')
       localStorage.removeItem('adminUsername')
-      navigate('/admin/login')
+      // Use navigate then force reload to fully clear React state
+      navigate('/admin/login', { replace: true })
+      // Force a page reload to clear all in-memory React state
+      setTimeout(() => window.location.reload(), 50)
     }
   }
 
