@@ -27,6 +27,7 @@ function App() {
             <Route path="berita/:id" element={<DetailBerita />} />
             <Route path="prestasi" element={<Prestasi />} />
           </Route>
+          <Route path="berita/:id" element={<DetailBerita />} />
           <Route path="pengurus" element={<Pengurus />} />
           <Route path="portal" element={<Navigate to="/informasi/berita" replace />} />
           <Route path="portal/:id" element={<Navigate to="/informasi/berita/:id" replace />} />

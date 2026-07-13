@@ -43,7 +43,7 @@ export default function NewsCard({ news }) {
 
         {/* Read More Link Button */}
         <Link
-          to={news.link || `/informasi/berita/${news.id}`}
+          to={`/berita/${news.id}`}
           className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#8b0000] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#b11919] w-full shadow-sm"
         >
           Selengkapnya
