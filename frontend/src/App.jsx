@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Layout from './components/Layout'
 import Home from './pages/Home'
-import Tentang from './pages/Tentang'
+
 import LatarBelakang from './pages/LatarBelakang'
 import VisiMisi from './pages/VisiMisi'
 import MaknaLogo from './pages/MaknaLogo'
@@ -18,7 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="tentang" element={<Tentang />} />
+          <Route path="tentang" element={<Navigate to="/tentang/latar-belakang" replace />} />
           <Route path="tentang/latar-belakang" element={<LatarBelakang />} />
           <Route path="tentang/visi-misi" element={<VisiMisi />} />
           <Route path="tentang/makna-logo" element={<MaknaLogo />} />

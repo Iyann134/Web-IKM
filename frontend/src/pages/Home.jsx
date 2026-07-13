@@ -210,7 +210,7 @@ export default function Home() {
               </p>
               <div>
                 <Link
-                  to="/tentang"
+                  to="/tentang/latar-belakang"
                   className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#e2be3c] hover:bg-[#d0ab2b] text-black text-[18px] font-semibold rounded-xl border border-black/15 shadow-sm transition-all hover:-translate-y-0.5 active:translate-y-0"
                 >
                   Kenali Lebih Dekat
