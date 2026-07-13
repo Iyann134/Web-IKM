@@ -87,8 +87,14 @@ export default function Layout() {
                   Latar Belakang
                 </NavLink>
                 <NavLink
-                  to="/tentang#visi-misi"
-                  className="flex items-center gap-3 rounded-lg px-4 py-2.5 text-[16px] font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#8b0000] transition"
+                  to="/tentang/visi-misi"
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 rounded-lg px-4 py-2.5 text-[16px] font-semibold transition ${
+                      isActive && location.pathname === '/tentang/visi-misi'
+                        ? 'bg-[#8b0000]/10 text-[#8b0000]'
+                        : 'text-slate-700 hover:bg-slate-50 hover:text-[#8b0000]'
+                    }`
+                  }
                 >
                   Visi &amp; Misi
                 </NavLink>
@@ -220,7 +226,7 @@ export default function Layout() {
                       Latar Belakang
                     </NavLink>
                     <NavLink
-                      to="/tentang#visi-misi"
+                      to="/tentang/visi-misi"
                       onClick={() => setMenuOpen(false)}
                       className="block px-4 py-2.5 rounded-lg hover:bg-slate-50 text-sm font-semibold text-slate-700 hover:text-[#8b0000]"
                     >
@@ -332,7 +338,7 @@ export default function Layout() {
                   <NavLink to="/" className="text-white/60 hover:text-white transition font-normal">Beranda</NavLink>
                   <NavLink to="/tentang" className="text-white hover:text-white transition font-semibold">Tentang Kami</NavLink>
                   <NavLink to="/tentang/latar-belakang" className="text-white/60 hover:text-white transition font-normal pl-2">Latar Belakang</NavLink>
-                  <NavLink to="/tentang#visi-misi" className="text-white/60 hover:text-white transition font-normal pl-2">Visi &amp; Misi</NavLink>
+                  <NavLink to="/tentang/visi-misi" className="text-white/60 hover:text-white transition font-normal pl-2">Visi &amp; Misi</NavLink>
                   <NavLink to="/tentang#makna-logo" className="text-white/60 hover:text-white transition font-normal pl-2">Makna Logo</NavLink>
                 </div>
                 <div className="flex flex-col space-y-2 text-white text-[15px]">
