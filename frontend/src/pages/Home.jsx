@@ -14,6 +14,9 @@ import fotoTari from '../assets/foto-tari.png'
 import fotoBaralek from '../assets/foto-baralek.png'
 import fotoTumpeng from '../assets/foto-tumpeng.png'
 
+import { dummyBerita } from '../data/dummyBerita'
+import NewsCard from '../components/NewsCard'
+
 // High-quality stock Unsplash fallbacks for preview until user uploads their assets
 const fallbackPhotos = [
   'https://images.unsplash.com/photo-1590073844006-33379778ae09?auto=format&fit=crop&w=600&q=80', // Baju (shirt back)
@@ -27,38 +30,6 @@ const fallbackPhotos = [
 // Songket motif pattern fallback
 const fallbackSongket = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'
 
-// Default static fallback news matching the design requirement (4 cards)
-const defaultNews = [
-  {
-    id: 1,
-    title: 'Peluncuran Website Resmi IKM ITERA',
-    date: '7 Juli 2026',
-    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80',
-    summary: 'Situs baru ini menjadi pusat informasi resmi bagi seluruh anggota.'
-  },
-  {
-    id: 2,
-    title: 'Workshop Tata Rias Adat Minangkabau',
-    date: '6 Juli 2026',
-    image: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=400&q=80',
-    summary: 'Kegiatan pelatihan rias tradisional untuk mendukung acara adat kampus.'
-  },
-  {
-    id: 3,
-    title: 'Rapat Kerja & Pelantikan Pengurus Baru',
-    date: '5 Juli 2026',
-    image: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=400&q=80',
-    summary: 'Pembentukan tim BPH dan departemen untuk periode kepengurusan terbaru.'
-  },
-  {
-    id: 4,
-    title: 'Persiapan Baralek Gadang Dies Natalis Ke-10',
-    date: '4 Juli 2026',
-    image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=400&q=80',
-    summary: 'IKM ITERA bersiap menyambut perayaan satu dekade dengan pertunjukan seni akbar.'
-  }
-]
-
 export default function Home() {
   const [newsList, setNewsList] = useState([])
   const [loading, setLoading] = useState(true)
@@ -67,28 +38,14 @@ export default function Home() {
     fetchBerita()
       .then((data) => {
         if (data && data.length > 0) {
-          // Map backend images or fallbacks
-          const formatted = data.map((item, idx) => ({
-            id: item.id,
-            title: item.title,
-            date: item.date,
-            image: item.image || defaultNews[idx % 4].image,
-            summary: item.content || item.summary
-          }))
-          // Ensure we have 4 items, pad with defaults if needed
-          if (formatted.length < 4) {
-            const padded = [...formatted, ...defaultNews.slice(formatted.length)]
-            setNewsList(padded)
-          } else {
-            setNewsList(formatted.slice(0, 4))
-          }
+          setNewsList(data.slice(0, 4))
         } else {
-          setNewsList(defaultNews)
+          setNewsList(dummyBerita.slice(0, 4))
         }
         setLoading(false)
       })
       .catch(() => {
-        setNewsList(defaultNews)
+        setNewsList(dummyBerita.slice(0, 4))
         setLoading(false)
       })
   }, [])
@@ -281,33 +238,7 @@ export default function Home() {
           
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-items-center">
             {newsList.map((item) => (
-              <article
-                key={item.id}
-                className="group w-64 h-72 bg-white rounded-xl border border-slate-200/50 shadow-md hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between items-center overflow-hidden pb-4"
-              >
-                <div className="h-36 w-full overflow-hidden">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    src={item.image}
-                    alt={item.title}
-                  />
-                </div>
-
-                <div className="w-56 h-28 flex flex-col justify-between items-start">
-                  <div className="self-stretch text-black/75 text-[16px] font-normal font-['Poppins']">
-                    {item.date}
-                  </div>
-                  <h4 className="self-stretch text-black text-[24px] font-normal font-['Poppins'] line-clamp-2 leading-tight group-hover:text-[#8b0000] transition-colors">
-                    {item.title}
-                  </h4>
-                  <Link
-                    to={`/informasi/berita/${item.id}`}
-                    className="text-black text-[16px] font-normal font-['Poppins'] hover:text-[#8b0000] transition-colors"
-                  >
-                    Selengkapnya
-                  </Link>
-                </div>
-              </article>
+              <NewsCard key={item.id} news={item} />
             ))}
           </div>
 
