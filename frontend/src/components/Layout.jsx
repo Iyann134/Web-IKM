@@ -17,12 +17,14 @@ import {
 export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false)
+  const [mobileTentangOpen, setMobileTentangOpen] = useState(false)
   const location = useLocation()
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('adminToken'))
 
   useEffect(() => {
     setIsLoggedIn(!!localStorage.getItem('adminToken'))
     setMobileDropdownOpen(false)
+    setMobileTentangOpen(false)
     setMenuOpen(false)
   }, [location])
 
@@ -58,18 +60,46 @@ export default function Layout() {
               Beranda
             </NavLink>
 
-            {/* Tentang */}
-            <NavLink
-              to="/tentang"
-              className={({ isActive }) =>
-                `flex items-center gap-1.5 py-1.5 text-[18px] font-semibold tracking-wide font-['Poppins'] transition-colors ${
-                  isActive ? 'text-[#8b0000] border-b-2 border-[#8b0000]' : 'text-black/85 hover:text-[#8b0000]'
-                }`
-              }
-            >
-              <span>Tentang</span>
-              <FontAwesomeIcon icon={faChevronDown} className="text-[10px] text-black/50" />
-            </NavLink>
+            {/* Dropdown Tentang */}
+            <div className="relative group">
+              <button
+                type="button"
+                className={`flex items-center gap-1.5 py-1.5 text-[18px] font-semibold tracking-wide font-['Poppins'] transition-colors cursor-pointer ${
+                  location.pathname.startsWith('/tentang') ? 'text-[#8b0000] border-b-2 border-[#8b0000]' : 'text-black/85 hover:text-[#8b0000]'
+                }`}
+              >
+                <span>Tentang</span>
+                <FontAwesomeIcon icon={faChevronDown} className="text-[10px] text-black/50 transition-transform group-hover:rotate-180 duration-300" />
+              </button>
+              
+              {/* Dropdown Menu Overlay */}
+              <div className="absolute left-0 top-full mt-1 w-52 origin-top-left rounded-xl border border-slate-200/80 bg-white p-2 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform scale-95 group-hover:scale-100 z-50">
+                <NavLink
+                  to="/tentang/latar-belakang"
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 rounded-lg px-4 py-2.5 text-[16px] font-semibold transition ${
+                      isActive && location.pathname === '/tentang/latar-belakang'
+                        ? 'bg-[#8b0000]/10 text-[#8b0000]'
+                        : 'text-slate-700 hover:bg-slate-50 hover:text-[#8b0000]'
+                    }`
+                  }
+                >
+                  Latar Belakang
+                </NavLink>
+                <NavLink
+                  to="/tentang#visi-misi"
+                  className="flex items-center gap-3 rounded-lg px-4 py-2.5 text-[16px] font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#8b0000] transition"
+                >
+                  Visi &amp; Misi
+                </NavLink>
+                <NavLink
+                  to="/tentang#makna-logo"
+                  className="flex items-center gap-3 rounded-lg px-4 py-2.5 text-[16px] font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#8b0000] transition"
+                >
+                  Makna Logo
+                </NavLink>
+              </div>
+            </div>
 
             {/* Dropdown Berita */}
             <div className="relative group">
@@ -169,12 +199,43 @@ export default function Layout() {
               >
                 Beranda
               </NavLink>
-              <NavLink
-                to="/tentang"
-                className="block px-4 py-3 rounded-xl hover:bg-slate-50 text-base font-semibold text-slate-800 hover:text-[#8b0000]"
-              >
-                Tentang
-              </NavLink>
+              {/* Tentang Mobile Dropdown */}
+              <div className="border-t border-slate-100/50 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setMobileTentangOpen((prev) => !prev)}
+                  className="flex items-center justify-between w-full px-4 py-3 rounded-xl hover:bg-slate-50 text-base font-semibold text-slate-800 hover:text-[#8b0000] cursor-pointer"
+                >
+                  <span>Tentang</span>
+                  <FontAwesomeIcon icon={faChevronDown} className={`text-xs transition-transform duration-300 ${mobileTentangOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {mobileTentangOpen && (
+                  <div className="pl-4 space-y-1">
+                    <NavLink
+                      to="/tentang/latar-belakang"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2.5 rounded-lg hover:bg-slate-50 text-sm font-semibold text-slate-700 hover:text-[#8b0000]"
+                    >
+                      Latar Belakang
+                    </NavLink>
+                    <NavLink
+                      to="/tentang#visi-misi"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2.5 rounded-lg hover:bg-slate-50 text-sm font-semibold text-slate-700 hover:text-[#8b0000]"
+                    >
+                      Visi &amp; Misi
+                    </NavLink>
+                    <NavLink
+                      to="/tentang#makna-logo"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2.5 rounded-lg hover:bg-slate-50 text-sm font-semibold text-slate-700 hover:text-[#8b0000]"
+                    >
+                      Makna Logo
+                    </NavLink>
+                  </div>
+                )}
+              </div>
               
               <button
                 type="button"
@@ -250,10 +311,10 @@ export default function Layout() {
         <div className="mx-auto max-w-[1440px] px-6 md:px-12 flex flex-col gap-12">
           
           {/* Main Footer Info Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 items-start">
             
-            {/* Column 1: logo & summary */}
-            <div className="flex flex-col space-y-4 col-span-1 sm:col-span-2 lg:col-span-1">
+            {/* Column 1: Logo & Summary */}
+            <div className="flex flex-col space-y-4 col-span-1">
               <img className="w-28 h-28 object-contain" src={logoIkm} alt="Logo IKM" />
               <div className="space-y-2">
                 <div className="text-white text-[28px] font-bold">IKM - ITERA</div>
@@ -263,31 +324,30 @@ export default function Layout() {
               </div>
             </div>
 
-            {/* Column 2: Tentang Kami links */}
-            <div className="flex flex-col space-y-3">
-              <div className="flex flex-col space-y-2 text-white text-[18px]">
-                <NavLink to="/" className="text-white hover:text-white transition font-normal">Beranda</NavLink>
-                <NavLink to="/tentang" className="text-white hover:text-white transition font-semibold">Tentang Kami</NavLink>
-                <NavLink to="/tentang#sejarah" className="text-white/60 hover:text-white transition font-normal">Latar Belakang</NavLink>
-                <NavLink to="/tentang#visi-misi" className="text-white/60 hover:text-white transition font-normal">Visi &amp; Misi</NavLink>
-                <NavLink to="/tentang#logo" className="text-white/60 hover:text-white transition font-normal">Makna Logo</NavLink>
+            {/* Column 2: Navigation Links (Divided inside a single Column) */}
+            <div className="flex flex-col space-y-4 col-span-1">
+              <div className="text-white text-[20px] font-bold">Navigasi</div>
+              <div className="flex gap-10">
+                <div className="flex flex-col space-y-2 text-white text-[15px]">
+                  <NavLink to="/" className="text-white/60 hover:text-white transition font-normal">Beranda</NavLink>
+                  <NavLink to="/tentang" className="text-white hover:text-white transition font-semibold">Tentang Kami</NavLink>
+                  <NavLink to="/tentang/latar-belakang" className="text-white/60 hover:text-white transition font-normal pl-2">Latar Belakang</NavLink>
+                  <NavLink to="/tentang#visi-misi" className="text-white/60 hover:text-white transition font-normal pl-2">Visi &amp; Misi</NavLink>
+                  <NavLink to="/tentang#makna-logo" className="text-white/60 hover:text-white transition font-normal pl-2">Makna Logo</NavLink>
+                </div>
+                <div className="flex flex-col space-y-2 text-white text-[15px]">
+                  <NavLink to="/informasi/berita" className="text-white hover:text-white transition font-semibold">Berita</NavLink>
+                  <NavLink to="/informasi/berita" className="text-white/60 hover:text-white transition font-normal pl-2">Berita Terkini</NavLink>
+                  <NavLink to="/informasi/prestasi" className="text-white/60 hover:text-white transition font-normal pl-2">Pencapaian</NavLink>
+                  <NavLink to="/pengurus" className="text-white/60 hover:text-white transition font-normal mt-2">Pengurus</NavLink>
+                  <NavLink to="/admin/login" className="text-white hover:text-white transition font-bold">Developer</NavLink>
+                </div>
               </div>
             </div>
 
-            {/* Column 3: Berita & Pengurus */}
-            <div className="flex flex-col space-y-3">
-              <div className="flex flex-col space-y-2 text-white text-[18px]">
-                <NavLink to="/informasi/berita" className="text-white hover:text-white transition font-semibold">Berita</NavLink>
-                <NavLink to="/informasi/berita" className="text-white/60 hover:text-white transition font-normal">Berita Terkini</NavLink>
-                <NavLink to="/informasi/prestasi" className="text-white/60 hover:text-white transition font-normal">Pencapaian</NavLink>
-                <NavLink to="/pengurus" className="text-white/60 hover:text-white transition font-normal">Pengurus</NavLink>
-                <NavLink to="/admin/login" className="text-white hover:text-white transition font-bold">Developer</NavLink>
-              </div>
-            </div>
-
-            {/* Column 4: Sosial Media (Mockup custom SVGs) */}
-            <div className="flex flex-col space-y-4">
-              <div className="text-white text-[24px] font-semibold">Sosial Media</div>
+            {/* Column 3: Sosial Media */}
+            <div className="flex flex-col space-y-4 col-span-1">
+              <div className="text-white text-[20px] font-semibold">Sosial Media</div>
               <div className="flex items-center gap-3">
                 {/* Instagram SVG */}
                 <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition">
@@ -314,17 +374,17 @@ export default function Layout() {
               </div>
             </div>
 
-            {/* Column 5: Contact Details */}
-            <div className="flex flex-col space-y-4">
+            {/* Column 4: Contact Details */}
+            <div className="flex flex-col space-y-4 col-span-1">
               <div className="space-y-1">
-                <div className="text-white text-[24px] font-semibold">Lokasi</div>
-                <div className="text-white/60 text-[16px] leading-relaxed">
+                <div className="text-white text-[20px] font-semibold">Lokasi</div>
+                <div className="text-white/60 text-[15px] leading-relaxed">
                   Jl. Terusan Ryacudu, Way Hui, Kec. Jati Agung, Kabupaten Lampung Selatan, Lampung 35365
                 </div>
               </div>
               <div className="space-y-1">
-                <div className="text-white text-[24px] font-semibold">Email</div>
-                <div className="text-white/60 text-[16px] leading-relaxed">
+                <div className="text-white text-[20px] font-semibold">Email</div>
+                <div className="text-white/60 text-[15px] leading-relaxed">
                   ikatanminangitera@gmail.com
                 </div>
               </div>

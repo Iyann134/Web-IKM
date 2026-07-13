@@ -63,7 +63,7 @@ export default function Tentang() {
         </motion.div>
 
         {/* Visi & Misi Grid */}
-        <motion.div variants={itemVariants} className="grid gap-8 md:grid-cols-2">
+        <motion.div id="visi-misi" variants={itemVariants} className="grid gap-8 md:grid-cols-2 scroll-mt-28">
           {/* Visi Card */}
           <motion.div
             whileHover={{ y: -6, boxShadow: '0 25px 50px -12px rgba(139, 0, 0, 0.12)' }}
@@ -105,7 +105,7 @@ export default function Tentang() {
         </motion.div>
 
         {/* Timeline Sejarah Section */}
-        <motion.div variants={itemVariants} className="space-y-12">
+        <motion.div id="sejarah" variants={itemVariants} className="space-y-12 scroll-mt-28">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <h2 className="text-3xl font-extrabold text-[#8b0000]">Sejarah Perjalanan IKM</h2>
             <p className="text-sm text-slate-500">Menyusuri rintisan perjuangan dari awal terbentuk hingga era kejayaan dan kolaborasi.</p>
@@ -223,8 +223,9 @@ export default function Tentang() {
 
         {/* Makna Logo Section */}
         <motion.div
+          id="makna-logo"
           variants={itemVariants}
-          className="rounded-[2.5rem] bg-white border border-[#8b0000]/10 p-8 md:p-12 shadow-[0_25px_60px_-35px_rgba(0,0,0,0.1)] space-y-10"
+          className="rounded-[2.5rem] bg-white border border-[#8b0000]/10 p-8 md:p-12 shadow-[0_25px_60px_-35px_rgba(0,0,0,0.1)] space-y-10 scroll-mt-28"
         >
           <div className="text-center max-w-lg mx-auto space-y-2">
             <h2 className="text-3xl font-bold text-[#8b0000]">Makna Filosofis Lambang</h2>

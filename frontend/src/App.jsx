@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import Tentang from './pages/Tentang'
+import LatarBelakang from './pages/LatarBelakang'
 import Berita from './pages/Berita'
 import Prestasi from './pages/Prestasi'
 import DetailBerita from './pages/DetailBerita'
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="tentang" element={<Tentang />} />
+          <Route path="tentang/latar-belakang" element={<LatarBelakang />} />
           <Route path="informasi">
             <Route path="berita" element={<Berita />} />
             <Route path="berita/:id" element={<DetailBerita />} />
