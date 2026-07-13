@@ -7,10 +7,6 @@ import {
   faChevronDown,
   faBars,
   faXmark,
-  faLock,
-  faSignInAlt,
-  faNewspaper,
-  faTrophy,
   faUsers
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -126,7 +122,7 @@ export default function Layout() {
               </button>
               
               {/* Dropdown Menu Overlay */}
-              <div className="absolute right-0 top-full mt-1 w-52 origin-top-right rounded-xl border border-slate-200/80 bg-white p-2 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform scale-95 group-hover:scale-100 z-50">
+              <div className="absolute left-0 top-full mt-1 w-52 origin-top-left rounded-xl border border-slate-200/80 bg-white p-2 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform scale-95 group-hover:scale-100 z-50">
                 <NavLink
                   to="/informasi/berita"
                   className={({ isActive }) =>
@@ -137,7 +133,6 @@ export default function Layout() {
                     }`
                   }
                 >
-                  <FontAwesomeIcon icon={faNewspaper} className="w-4 text-xs" />
                   Berita Terkini
                 </NavLink>
                 <NavLink
@@ -150,7 +145,6 @@ export default function Layout() {
                     }`
                   }
                 >
-                  <FontAwesomeIcon icon={faTrophy} className="w-4 text-xs" />
                   Prestasi Mahasiswa
                 </NavLink>
               </div>
@@ -172,17 +166,15 @@ export default function Layout() {
             {isLoggedIn ? (
               <NavLink
                 to="/admin/dashboard"
-                className="px-6 py-2.5 bg-red-600 hover:bg-[#d82222] text-white text-[18px] font-semibold rounded-xl border border-black/10 shadow-sm transition-all hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2"
+                className="px-6 py-2.5 bg-red-600 hover:bg-[#d82222] text-white text-[18px] font-semibold rounded-xl border border-black/10 shadow-sm transition-all hover:-translate-y-0.5 active:translate-y-0"
               >
-                <FontAwesomeIcon icon={faLock} className="text-xs" />
-                Dashboard
+                Login
               </NavLink>
             ) : (
               <NavLink
                 to="/admin/login"
-                className="px-6 py-2.5 bg-red-600 hover:bg-[#d82222] text-white text-[18px] font-semibold rounded-xl border border-black/10 shadow-sm transition-all hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2"
+                className="px-6 py-2.5 bg-red-600 hover:bg-[#d82222] text-white text-[18px] font-semibold rounded-xl border border-black/10 shadow-sm transition-all hover:-translate-y-0.5 active:translate-y-0"
               >
-                <FontAwesomeIcon icon={faSignInAlt} className="text-xs" />
                 Login
               </NavLink>
             )}
