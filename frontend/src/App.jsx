@@ -11,6 +11,8 @@ import DetailBerita from './pages/DetailBerita'
 import Pengurus from './pages/Pengurus'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import AdminBerita from './pages/AdminBerita'
+import AdminLayout from './components/AdminLayout'
 
 function App() {
   return (
@@ -33,7 +35,12 @@ function App() {
           <Route path="portal/:id" element={<Navigate to="/informasi/berita/:id" replace />} />
         </Route>
         <Route path="admin/login" element={<Login />} />
-        <Route path="admin/dashboard" element={<Dashboard />} />
+        
+        {/* Admin layout wrappers */}
+        <Route path="admin" element={<AdminLayout />}>
+          <Route path="dashboard" element={<Navigate to="/admin/berita" replace />} />
+          <Route path="berita" element={<AdminBerita />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

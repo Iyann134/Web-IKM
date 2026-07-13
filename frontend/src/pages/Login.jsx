@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLock, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { loginAdmin } from '../services/api'
 import logoIkm from '../assets/logo-ikm.png'
+
+// =========================================================================
+// ADMIN LOGIN PAGE
+// =========================================================================
 
 export default function Login() {
   const [username, setUsername] = useState('')
@@ -22,8 +24,15 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
     setError(null)
+
+    // Custom validation — consistent with card UI instead of browser popup
+    if (!username.trim() || !password.trim()) {
+      setError('Username dan password wajib diisi.')
+      return
+    }
+
+    setLoading(true)
 
     try {
       const data = await loginAdmin(username, password)
@@ -42,68 +51,68 @@ export default function Login() {
   }
 
   return (
-    <section className="bg-[#fff9f4] min-h-[70vh] flex items-center justify-center px-6 py-12">
-      <div className="w-full max-w-md bg-white rounded-[2rem] border border-[#8b0000]/10 p-8 md:p-10 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.25)] relative overflow-hidden">
-        
-        {/* Ticker / Banner Motif top */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-marawa-gradient"></div>
+    <div className="min-h-screen bg-orange-50 flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 flex flex-col items-center">
 
-        <div className="text-center mb-8">
-          <img src={logoIkm} alt="IKM ITERA Logo" className="mx-auto h-16 w-16 object-contain rounded-full shadow-sm mb-4" />
-          <h1 className="text-2xl font-bold text-[#8b0000]">Login Administrator</h1>
-          <p className="text-xs text-slate-500 mt-2 uppercase tracking-widest">Web Portal IKM ITERA</p>
-        </div>
+        {/* Logo & Title */}
+        <img
+          src={logoIkm}
+          alt="Logo IKM ITERA"
+          className="w-20 h-24 object-contain"
+        />
+        <h1 className="text-black text-2xl font-bold font-['Poppins'] mt-2 text-center">
+          Login Admin
+        </h1>
 
+        {/* Error Message */}
         {error && (
-          <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          <div className="w-full mt-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 text-center">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Username</label>
-            <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-                <FontAwesomeIcon icon={faUser} />
-              </span>
-              <input
-                type="text"
-                required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Masukkan username admin"
-                className="w-full rounded-2xl border border-slate-200 bg-[#fffbf9] pl-10 pr-5 py-3.5 text-sm focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] focus:outline-none transition"
-              />
-            </div>
+        {/* Login Form */}
+        <form onSubmit={handleSubmit} className="w-full mt-6 flex flex-col gap-4">
+
+          {/* Username Field */}
+          <div className="flex flex-col gap-1">
+            <label className="text-black text-base font-normal font-['Poppins']">
+              Username
+            </label>
+            <input
+              type="text"
+              placeholder="Masukkan username akun"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full h-10 px-3 bg-black/10 rounded-md outline-none focus:ring-2 focus:ring-red-600 border border-black/20 text-black font-['Poppins'] text-base placeholder:text-black/50"
+            />
           </div>
 
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Password</label>
-            <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-                <FontAwesomeIcon icon={faLock} />
-              </span>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Masukkan password"
-                className="w-full rounded-2xl border border-slate-200 bg-[#fffbf9] pl-10 pr-5 py-3.5 text-sm focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] focus:outline-none transition"
-              />
-            </div>
+          {/* Password Field */}
+          <div className="flex flex-col gap-1">
+            <label className="text-black text-base font-normal font-['Poppins']">
+              Password
+            </label>
+            <input
+              type="password"
+              placeholder="Masukkan password akun"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full h-10 px-3 bg-black/10 rounded-md outline-none focus:ring-2 focus:ring-red-600 border border-black/20 text-black font-['Poppins'] text-base placeholder:text-black/50"
+            />
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-2xl bg-[#8b0000] py-3.5 text-sm font-semibold text-white transition hover:bg-[#b11919] shadow-md shadow-red-900/10 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full h-12 bg-red-600 hover:bg-red-700 transition-colors rounded-md text-white text-lg font-bold font-['Poppins'] flex justify-center items-center mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {loading ? 'Memvalidasi...' : 'Masuk ke Dasbor'}
+            {loading ? 'Memvalidasi...' : 'Login'}
           </button>
+
         </form>
       </div>
-    </section>
+    </div>
   )
 }
