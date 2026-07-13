@@ -1,60 +1,66 @@
 import { useEffect, useState } from 'react'
 import { fetchPrestasi } from '../services/api'
 import LoadingLogo from '../components/LoadingLogo'
+import PrestasiCard from '../components/PrestasiCard'
+import { dummyPrestasi } from '../data/dummyPrestasi'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faTrophy, faCalendarAlt, faAward } from '@fortawesome/free-solid-svg-icons'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+
+// =========================================================================
+// JEJAK KARYA & PRESTASI PAGE
+// =========================================================================
 
 export default function Prestasi() {
   const [achievements, setAchievements] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedYear, setSelectedYear] = useState('Semua')
 
   useEffect(() => {
     fetchPrestasi()
       .then((data) => {
-        setAchievements(data)
+        // Fallback to dummy data if database is empty
+        if (data && data.length > 0) {
+          setAchievements(data)
+        } else {
+          setAchievements(dummyPrestasi)
+        }
         setLoading(false)
       })
       .catch((err) => {
-        setError(err.message)
+        console.warn('Backend API error or offline, loading from local dummy data:', err.message)
+        // Fallback to local dummy data during local development
+        setAchievements(dummyPrestasi)
         setLoading(false)
       })
   }, [])
 
-  // Extract unique years for filtering
-  const uniqueYears = Array.from(
-    new Set(achievements.map((item) => item.year))
-  ).sort((a, b) => b - a)
-
-  // Filter achievements
+  // Filter logic for searching (supports both dummy and API properties)
   const filteredAchievements = achievements.filter((item) => {
-    const matchesSearch =
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesYear = selectedYear === 'Semua' || item.year.toString() === selectedYear
-    return matchesSearch && matchesYear
+    const titleText = item.achievementName || item.title || ''
+    const eventText = item.eventName || item.description || ''
+    return (
+      titleText.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      eventText.toLowerCase().includes(searchQuery.toLowerCase())
+    )
   })
 
   return (
-    <section className="bg-[#fff9f4] py-16 px-6 text-[#1f1414] min-h-[80vh]">
-      <div className="mx-auto max-w-7xl space-y-12">
-        {/* Header Hero Card */}
-        <div className="rounded-[2rem] border border-[#8b0000]/10 bg-gradient-to-r from-[#fff5ec] via-[#fff0d1] to-[#fff5ec] p-8 md:p-12 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.2)] relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#8b0000]/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
-          <div className="relative z-10 max-w-3xl space-y-4">
-            <p className="text-xs uppercase tracking-[0.35em] text-[#8b0000] font-bold">Prestasi Mahasiswa</p>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-[#8b0000] leading-tight">Jejak Prestasi IKM ITERA</h2>
-            <p className="text-sm md:text-base leading-relaxed text-slate-700">
-              Dokumentasi dan apresiasi atas pencapaian gemilang mahasiswa Minangkabau di lingkungan Institut Teknologi Sumatera, baik dalam bidang akademik, olahraga, seni budaya, maupun sosial.
-            </p>
-          </div>
+    <section className="bg-orange-50 py-16 px-6 text-[#1f1414] min-h-screen flex flex-col justify-start">
+      <div className="mx-auto max-w-7xl w-full flex flex-col items-center">
+
+        {/* Page Title Section */}
+        <div className="text-center space-y-4">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+            Jejak Karya &amp; Prestasi
+          </h1>
+          <p className="text-slate-500 text-sm sm:text-base max-w-2xl mx-auto">
+            Dedikasi dan semangat juang keluarga besar IKM ITERA di berbagai bidang, baik akademik maupun non-akademik.
+          </p>
         </div>
 
-        {/* Search & Filter Controls */}
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-5 rounded-3xl border border-[#8b0000]/10 shadow-[0_15px_40px_-25px_rgba(0,0,0,0.15)]">
-          <div className="relative w-full md:max-w-md">
+        {/* Search Control Bar (Exactly 15px margin top) */}
+        <div className="flex justify-center max-w-xl mx-auto w-full mt-[15px]">
+          <div className="relative w-full shadow-sm rounded-2xl bg-white border border-slate-200 overflow-hidden">
             <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
               <FontAwesomeIcon icon={faSearch} />
             </span>
@@ -63,63 +69,30 @@ export default function Prestasi() {
               placeholder="Cari prestasi..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-2xl border border-slate-200 bg-[#fffbf9] pl-11 pr-5 py-3 text-sm focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] focus:outline-none transition"
+              className="w-full pl-11 pr-5 py-3.5 text-base border-none focus:outline-none focus:ring-2 focus:ring-[#8b0000]/10 transition"
             />
-          </div>
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 whitespace-nowrap">Tahun Prestasi:</span>
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="w-full md:w-40 rounded-2xl border border-slate-200 bg-[#fffbf9] px-4 py-3 text-sm focus:border-[#8b0000] focus:outline-none transition font-medium text-slate-700 cursor-pointer"
-            >
-              <option value="Semua">Semua Tahun</option>
-              {uniqueYears.map((year) => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </select>
           </div>
         </div>
 
+        {/* Achievements Grid / Empty State Rendering (mt-12 spacing below search bar) */}
         {loading ? (
-          <LoadingLogo message="Memuat prestasi..." />
-        ) : error ? (
-          <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center text-red-700 shadow-sm">
-            Terjadi kesalahan: {error}
+          <div className="w-full mt-12 flex justify-center">
+            <LoadingLogo message="Memuat prestasi..." />
           </div>
         ) : (
-          <div className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mt-12 w-full">
             {filteredAchievements.length > 0 ? (
-              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                {filteredAchievements.map((item) => (
-                  <article key={item.id} className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 md:p-8 shadow-sm hover:shadow-xl hover:border-[#8b0000]/25 transition duration-300">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#8b0000]/5 rounded-bl-[4rem] flex items-start justify-end p-4">
-                      <FontAwesomeIcon icon={faTrophy} className="text-[#8b0000]/30 text-lg group-hover:scale-110 transition-transform" />
-                    </div>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1 rounded-full bg-[#8b0000] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
-                          <FontAwesomeIcon icon={faAward} />
-                          {item.year}
-                        </span>
-                      </div>
-                      <h4 className="text-xl font-bold text-[#48241f] leading-snug group-hover:text-[#8b0000] transition-colors pt-2">
-                        {item.title}
-                      </h4>
-                      <p className="text-sm leading-relaxed text-slate-600">
-                        {item.description}
-                      </p>
-                    </div>
-                  </article>
-                ))}
-              </div>
+              filteredAchievements.map((item) => (
+                <PrestasiCard key={item.id} prestasi={item} />
+              ))
             ) : (
-              <div className="rounded-3xl bg-white border border-slate-200/60 p-16 text-center text-slate-500 shadow-sm">
-                Tidak ada prestasi yang ditemukan untuk kriteria pencarian Anda.
+              <div className="col-span-full text-center text-gray-500 py-20 text-xl font-medium">
+                Belum ada catatan prestasi saat ini.
               </div>
             )}
           </div>
         )}
+
       </div>
     </section>
   )

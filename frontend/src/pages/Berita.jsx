@@ -44,20 +44,20 @@ export default function Berita() {
 
   return (
     <section className="bg-orange-50 py-16 px-6 text-[#1f1414] min-h-screen flex flex-col justify-start">
-      <div className="mx-auto max-w-7xl w-full space-y-10">
+      <div className="mx-auto max-w-7xl w-full flex flex-col items-center">
         
         {/* Page Title Section */}
-        <div className="text-center">
+        <div className="text-center space-y-4">
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
             Berita Terkini
           </h1>
-          <p className="text-slate-500 text-sm sm:text-base mt-2 max-w-2xl mx-auto">
+          <p className="text-slate-500 text-sm sm:text-base max-w-2xl mx-auto">
             Ikuti perkembangan terbaru, agenda kegiatan kemahasiswaan, dan pelestarian adat budaya IKM ITERA.
           </p>
         </div>
 
-        {/* Search Control Bar */}
-        <div className="flex justify-center max-w-xl mx-auto w-full">
+        {/* Search Control Bar (Exactly 15px margin top) */}
+        <div className="flex justify-center max-w-xl mx-auto w-full mt-[15px]">
           <div className="relative w-full shadow-sm rounded-2xl bg-white border border-slate-200 overflow-hidden">
             <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
               <FontAwesomeIcon icon={faSearch} />
@@ -74,9 +74,11 @@ export default function Berita() {
 
         {/* News Grid / Empty State Rendering */}
         {loading ? (
-          <LoadingLogo message="Memuat berita terkini..." />
+          <div className="w-full mt-8 flex justify-center">
+            <LoadingLogo message="Memuat berita terkini..." />
+          </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mt-8 w-full">
             {filteredNews.length > 0 ? (
               filteredNews.map((item) => (
                 <NewsCard key={item.id} news={item} />
