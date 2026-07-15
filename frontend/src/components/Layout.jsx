@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { NavLink, Outlet, useLocation, Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PageTransition from './PageTransition'
 import logoIkm from '../assets/logo-ikm.png'
@@ -344,7 +344,7 @@ export default function Layout() {
                   <NavLink to="/informasi/berita" className="text-white/60 hover:text-white transition font-normal pl-2">Berita Terkini</NavLink>
                   <NavLink to="/informasi/prestasi" className="text-white/60 hover:text-white transition font-normal pl-2">Pencapaian</NavLink>
                   <NavLink to="/pengurus" className="text-white/60 hover:text-white transition font-normal mt-2">Pengurus</NavLink>
-                  <NavLink to="/admin/login" className="text-white hover:text-white transition font-bold">Developer</NavLink>
+                  <Link to="/developer" className="cursor-pointer hover:text-red-500 transition-colors text-white font-bold">Developer</Link>
                 </div>
               </div>
             </div>
@@ -403,7 +403,7 @@ export default function Layout() {
             </div>
             <div>
               <span>Designed &amp; Developed by </span>
-              <span className="text-white font-bold">Gian Ivander</span>
+              <Link to="/developer" className="text-white font-bold cursor-pointer hover:text-red-500 hover:underline transition-all duration-300">Gian Ivander</Link>
             </div>
           </div>
 

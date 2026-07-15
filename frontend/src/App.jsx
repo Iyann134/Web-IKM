@@ -15,6 +15,7 @@ import AdminBerita from './pages/AdminBerita'
 import AdminPencapaian from './pages/AdminPencapaian'
 import AdminPengurus from './pages/AdminPengurus'
 import AdminLayout from './components/AdminLayout'
+import Developer from './pages/Developer'
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           </Route>
           <Route path="berita/:id" element={<DetailBerita />} />
           <Route path="pengurus" element={<Pengurus />} />
+          <Route path="developer" element={<Developer />} />
           <Route path="portal" element={<Navigate to="/informasi/berita" replace />} />
           <Route path="portal/:id" element={<Navigate to="/informasi/berita/:id" replace />} />
         </Route>
