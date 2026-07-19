@@ -331,23 +331,25 @@ export default function Layout() {
               </div>
             </div>
 
-            {/* Column 2: Navigation Links (Divided inside a single Column) */}
+            {/* Column 2: Navigation Links */}
             <div className="flex flex-col space-y-4 col-span-1">
               <div className="text-white text-[20px] font-bold">Navigasi</div>
-              <div className="flex gap-10">
-                <div className="flex flex-col space-y-2 text-white text-[15px]">
-                  <NavLink to="/" className="text-white/60 hover:text-white transition font-normal">Beranda</NavLink>
-                  <NavLink to="/tentang" className="text-white hover:text-white transition font-semibold">Tentang Kami</NavLink>
-                  <NavLink to="/tentang/latar-belakang" className="text-white/60 hover:text-white transition font-normal pl-2">Latar Belakang</NavLink>
-                  <NavLink to="/tentang/visi-misi" className="text-white/60 hover:text-white transition font-normal pl-2">Visi &amp; Misi</NavLink>
-                  <NavLink to="/tentang/makna-logo" className="text-white/60 hover:text-white transition font-normal pl-2">Makna Logo</NavLink>
+              <div className="flex gap-12">
+                {/* About Sub-links */}
+                <div className="flex flex-col space-y-2.5 text-white text-[15px]">
+                  <div className="font-semibold text-white/90 select-none">Tentang Kami</div>
+                  <NavLink to="/tentang/latar-belakang" className="text-white/60 hover:text-white transition font-normal pl-1">Latar Belakang</NavLink>
+                  <NavLink to="/tentang/visi-misi" className="text-white/60 hover:text-white transition font-normal pl-1">Visi &amp; Misi</NavLink>
+                  <NavLink to="/tentang/makna-logo" className="text-white/60 hover:text-white transition font-normal pl-1">Makna Logo</NavLink>
                 </div>
-                <div className="flex flex-col space-y-2 text-white text-[15px]">
-                  <NavLink to="/informasi/berita" className="text-white hover:text-white transition font-semibold">Berita</NavLink>
-                  <NavLink to="/informasi/berita" className="text-white/60 hover:text-white transition font-normal pl-2">Berita Terkini</NavLink>
-                  <NavLink to="/informasi/prestasi" className="text-white/60 hover:text-white transition font-normal pl-2">Pencapaian</NavLink>
-                  <NavLink to="/pengurus" className="text-white/60 hover:text-white transition font-normal mt-2">Pengurus</NavLink>
-                  <Link to="/developer" className="cursor-pointer hover:text-red-500 transition-colors text-white font-bold">Developer</Link>
+                {/* Main Directory Links */}
+                <div className="flex flex-col space-y-2.5 text-white text-[15px]">
+                  <div className="font-semibold text-white/90 select-none">Tautan</div>
+                  <NavLink to="/" className="text-white/60 hover:text-white transition font-normal">Beranda</NavLink>
+                  <NavLink to="/informasi/berita" className="text-white/60 hover:text-white transition font-normal">Berita</NavLink>
+                  <NavLink to="/informasi/prestasi" className="text-white/60 hover:text-white transition font-normal">Pencapaian</NavLink>
+                  <NavLink to="/pengurus" className="text-white/60 hover:text-white transition font-normal">Pengurus</NavLink>
+                  <Link to="/developer" className="text-white/60 hover:text-white transition font-normal">Developer</Link>
                 </div>
               </div>
             </div>
