@@ -15,7 +15,7 @@ export default function AdminSidebar({ isOpen, setIsOpen }) {
       localStorage.removeItem('adminToken')
       localStorage.removeItem('adminUsername')
       // Use navigate then force reload to fully clear React state
-      navigate('/admin/login', { replace: true })
+      navigate('/', { replace: true })
       // Force a page reload to clear all in-memory React state
       setTimeout(() => window.location.reload(), 50)
     }

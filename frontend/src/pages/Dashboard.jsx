@@ -98,7 +98,7 @@ export default function Dashboard() {
   const handleLogout = () => {
     localStorage.removeItem('adminToken')
     localStorage.removeItem('adminUsername')
-    navigate('/admin/login')
+    navigate('/')
   }
 
   const showNotification = (msg) => {
