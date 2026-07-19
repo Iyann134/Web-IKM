@@ -14,6 +14,7 @@ if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY || !process.env.JWT_S
 }
 
 const app = express()
+app.set('trust proxy', 1) // trust first proxy for serverless environments (like Vercel)
 const PORT = process.env.PORT || 5000
 
 // Enable helmet security headers
