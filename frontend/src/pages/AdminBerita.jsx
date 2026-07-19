@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faEdit, faTrash, faNewspaper, faTimes, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faEdit, faTrash, faNewspaper, faBars } from '@fortawesome/free-solid-svg-icons'
 import LoadingLogo from '../components/LoadingLogo'
 import {
   fetchBerita,
@@ -15,7 +15,7 @@ import { dummyBerita } from '../data/dummyBerita'
 export default function AdminBerita() {
   const navigate = useNavigate()
   const { isSidebarOpen, setIsSidebarOpen } = useOutletContext()
-  const [token, setToken] = useState('')
+  const [token] = useState(() => localStorage.getItem('adminToken') || '')
   const [beritaList, setBeritaList] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -36,27 +36,26 @@ export default function AdminBerita() {
     const storedToken = localStorage.getItem('adminToken')
     if (!storedToken) {
       navigate('/admin/login')
-    } else {
-      setToken(storedToken)
-      loadBerita()
+      return
     }
-  }, [navigate])
 
-  const loadBerita = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const data = await fetchBerita()
-      // Fallback to dummy if data is null, undefined, or an empty array
-      const list = Array.isArray(data) && data.length > 0 ? data : dummyBerita
-      setBeritaList(list)
-    } catch (err) {
-      console.warn('Backend berita API offline or error, falling back to dummy data:', err.message)
-      setBeritaList(dummyBerita)
-    } finally {
-      setLoading(false)
+    const loadBerita = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const data = await fetchBerita()
+        const list = Array.isArray(data) && data.length > 0 ? data : dummyBerita
+        setBeritaList(list)
+      } catch (err) {
+        console.warn('Backend berita API offline or error, falling back to dummy data:', err.message)
+        setBeritaList(dummyBerita)
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+
+    loadBerita()
+  }, [navigate])
 
   const showNotification = (msg) => {
     setSuccessMsg(msg)

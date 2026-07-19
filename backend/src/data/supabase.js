@@ -7,7 +7,8 @@ const supabaseUrl = process.env.SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_KEY
 
 if (!supabaseUrl || !supabaseKey) {
-  console.warn('Supabase URL or Key is missing in environment configuration.')
+  console.error('CRITICAL ERROR: Missing essential environment variables (SUPABASE_URL or SUPABASE_KEY).')
+  process.exit(1)
 }
 
 export const supabase = createClient(supabaseUrl, supabaseKey)

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faEdit, faTrash, faTrophy, faTimes, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faEdit, faTrash, faTrophy, faBars } from '@fortawesome/free-solid-svg-icons'
 import LoadingLogo from '../components/LoadingLogo'
 import { dummyPrestasi } from '../data/dummyPrestasi'
 import {
@@ -19,7 +19,7 @@ import {
 export default function AdminPencapaian() {
   const navigate = useNavigate()
   const { isSidebarOpen, setIsSidebarOpen } = useOutletContext()
-  const [token, setToken] = useState('')
+  const [token] = useState(() => localStorage.getItem('adminToken') || '')
   const [prestasiList, setPrestasiList] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -40,30 +40,29 @@ export default function AdminPencapaian() {
     const storedToken = localStorage.getItem('adminToken')
     if (!storedToken) {
       navigate('/admin/login')
-    } else {
-      setToken(storedToken)
-      loadPrestasi()
+      return
     }
-  }, [navigate])
 
-  const loadPrestasi = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const data = await fetchPrestasi()
-      // If backend returns empty array or null, fallback to local dummyPrestasi
-      if (data && data.length > 0) {
-        setPrestasiList(data)
-      } else {
+    const loadPrestasi = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const data = await fetchPrestasi()
+        if (data && data.length > 0) {
+          setPrestasiList(data)
+        } else {
+          setPrestasiList(dummyPrestasi)
+        }
+      } catch (err) {
+        console.warn('Backend prestasi API offline or error, falling back to dummy data:', err.message)
         setPrestasiList(dummyPrestasi)
+      } finally {
+        setLoading(false)
       }
-    } catch (err) {
-      console.warn('Backend prestasi API offline or error, falling back to dummy data:', err.message)
-      setPrestasiList(dummyPrestasi)
-    } finally {
-      setLoading(false)
     }
-  }
+
+    loadPrestasi()
+  }, [navigate])
 
   const showNotification = (msg) => {
     setSuccessMsg(msg)
@@ -132,7 +131,7 @@ export default function AdminPencapaian() {
       await deletePrestasi(token, id)
       setPrestasiList(prestasiList.filter(item => item.id !== id))
       showNotification('Prestasi berhasil dihapus.')
-    } catch (err) {
+    } catch {
       // Fallback for purely local items
       setPrestasiList(prestasiList.filter(item => item.id !== id))
       showNotification('Prestasi berhasil dihapus dari tampilan lokal.')
@@ -159,7 +158,7 @@ export default function AdminPencapaian() {
       if (editMode) {
         // Update
         try {
-          const updated = await updatePrestasi(token, currentId, payload)
+          await updatePrestasi(token, currentId, payload)
           setPrestasiList(prestasiList.map(item => item.id === currentId ? {
             ...item,
             achievementName: prestasiForm.title,

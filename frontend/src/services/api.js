@@ -6,6 +6,18 @@ const api = axios.create({
   baseURL: API_BASE_URL
 })
 
+// Response interceptor to handle authentication/authorization errors globally
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      localStorage.removeItem('adminToken')
+      window.location.href = '/admin/login'
+    }
+    return Promise.reject(error)
+  }
+)
+
 // Helper to attach authorization header
 const authConfig = (token) => ({
   headers: {
@@ -20,7 +32,7 @@ export async function fetchPengurus() {
     const response = await api.get('/pengurus')
     return response.data.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal mengambil data pengurus.')
+    throw new Error(error.response?.data?.message || 'Gagal mengambil data pengurus.', { cause: error })
   }
 }
 
@@ -29,7 +41,7 @@ export async function fetchBerita() {
     const response = await api.get('/berita')
     return response.data.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal mengambil data berita.')
+    throw new Error(error.response?.data?.message || 'Gagal mengambil data berita.', { cause: error })
   }
 }
 
@@ -38,7 +50,7 @@ export async function fetchPrestasi() {
     const response = await api.get('/prestasi')
     return response.data.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal mengambil data prestasi.')
+    throw new Error(error.response?.data?.message || 'Gagal mengambil data prestasi.', { cause: error })
   }
 }
 
@@ -47,7 +59,7 @@ export async function fetchBeritaById(id) {
     const response = await api.get(`/berita/${id}`)
     return response.data.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal mengambil detail berita.')
+    throw new Error(error.response?.data?.message || 'Gagal mengambil detail berita.', { cause: error })
   }
 }
 
@@ -58,7 +70,7 @@ export async function loginAdmin(username, password) {
     const response = await api.post('/auth/login', { username, password })
     return response.data // Contains token, admin info
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Login gagal. Periksa kembali username dan password Anda.')
+    throw new Error(error.response?.data?.message || 'Login gagal. Periksa kembali username dan password Anda.', { cause: error })
   }
 }
 
@@ -77,7 +89,7 @@ export async function uploadImage(token, file) {
     })
     return response.data.imageUrl
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal mengunggah gambar.')
+    throw new Error(error.response?.data?.message || 'Gagal mengunggah gambar.', { cause: error })
   }
 }
 
@@ -90,7 +102,7 @@ export async function createPengurus(token, data) {
     const response = await api.post('/pengurus', data, authConfig(token))
     return response.data.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal menambahkan pengurus.')
+    throw new Error(error.response?.data?.message || 'Gagal menambahkan pengurus.', { cause: error })
   }
 }
 
@@ -99,7 +111,7 @@ export async function updatePengurus(token, id, data) {
     const response = await api.put(`/pengurus/${id}`, data, authConfig(token))
     return response.data.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal memperbarui pengurus.')
+    throw new Error(error.response?.data?.message || 'Gagal memperbarui pengurus.', { cause: error })
   }
 }
 
@@ -108,7 +120,7 @@ export async function deletePengurus(token, id) {
     const response = await api.delete(`/pengurus/${id}`, authConfig(token))
     return response.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal menghapus pengurus.')
+    throw new Error(error.response?.data?.message || 'Gagal menghapus pengurus.', { cause: error })
   }
 }
 
@@ -118,7 +130,7 @@ export async function createBerita(token, data) {
     const response = await api.post('/berita', data, authConfig(token))
     return response.data.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal membuat berita.')
+    throw new Error(error.response?.data?.message || 'Gagal membuat berita.', { cause: error })
   }
 }
 
@@ -127,7 +139,7 @@ export async function updateBerita(token, id, data) {
     const response = await api.put(`/berita/${id}`, data, authConfig(token))
     return response.data.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal memperbarui berita.')
+    throw new Error(error.response?.data?.message || 'Gagal memperbarui berita.', { cause: error })
   }
 }
 
@@ -136,7 +148,7 @@ export async function deleteBerita(token, id) {
     const response = await api.delete(`/berita/${id}`, authConfig(token))
     return response.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal menghapus berita.')
+    throw new Error(error.response?.data?.message || 'Gagal menghapus berita.', { cause: error })
   }
 }
 
@@ -146,7 +158,7 @@ export async function createPrestasi(token, data) {
     const response = await api.post('/prestasi', data, authConfig(token))
     return response.data.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal menambahkan prestasi.')
+    throw new Error(error.response?.data?.message || 'Gagal menambahkan prestasi.', { cause: error })
   }
 }
 
@@ -155,7 +167,7 @@ export async function updatePrestasi(token, id, data) {
     const response = await api.put(`/prestasi/${id}`, data, authConfig(token))
     return response.data.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal memperbarui prestasi.')
+    throw new Error(error.response?.data?.message || 'Gagal memperbarui prestasi.', { cause: error })
   }
 }
 
@@ -164,6 +176,6 @@ export async function deletePrestasi(token, id) {
     const response = await api.delete(`/prestasi/${id}`, authConfig(token))
     return response.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Gagal menghapus prestasi.')
+    throw new Error(error.response?.data?.message || 'Gagal menghapus prestasi.', { cause: error })
   }
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUsers, faTrash, faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faUsers, faTrash, faBars } from '@fortawesome/free-solid-svg-icons'
 import LoadingLogo from '../components/LoadingLogo'
 import { uploadImage } from '../services/api'
 
@@ -12,7 +12,7 @@ import { uploadImage } from '../services/api'
 export default function AdminPengurus() {
   const navigate = useNavigate()
   const { isSidebarOpen, setIsSidebarOpen } = useOutletContext()
-  const [token, setToken] = useState('')
+  const [token] = useState(() => localStorage.getItem('adminToken') || '')
   const [strukturImg, setStrukturImg] = useState(null) // null = not uploaded
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
@@ -38,24 +38,24 @@ export default function AdminPengurus() {
     const storedToken = localStorage.getItem('adminToken')
     if (!storedToken) {
       navigate('/admin/login')
-    } else {
-      setToken(storedToken)
-      loadStruktur()
+      return
     }
-  }, [navigate])
 
-  const loadStruktur = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const url = await fetchStrukturOrg()
-      setStrukturImg(url)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
+    const loadStruktur = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const url = await fetchStrukturOrg()
+        setStrukturImg(url)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+
+    loadStruktur()
+  }, [navigate])
 
   const showNotification = (msg) => {
     setSuccessMsg(msg)

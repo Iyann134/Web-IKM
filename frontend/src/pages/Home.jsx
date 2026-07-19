@@ -32,7 +32,6 @@ const fallbackSongket = 'https://images.unsplash.com/photo-1618005182384-a83a8bd
 
 export default function Home() {
   const [newsList, setNewsList] = useState([])
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetchBerita()
@@ -42,11 +41,9 @@ export default function Home() {
         } else {
           setNewsList(dummyBerita.slice(0, 4))
         }
-        setLoading(false)
       })
       .catch(() => {
         setNewsList(dummyBerita.slice(0, 4))
-        setLoading(false)
       })
   }, [])
 

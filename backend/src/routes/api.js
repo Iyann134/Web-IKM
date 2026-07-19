@@ -18,6 +18,13 @@ import {
 } from '../controllers/apiController.js'
 import { uploadImage } from '../controllers/uploadController.js'
 import { authenticateToken } from '../middleware/auth.js'
+import {
+  validateIdParam,
+  validateLogin,
+  validatePengurus,
+  validateBerita,
+  validatePrestasi
+} from '../middleware/validation.js'
 
 const router = express.Router()
 const upload = multer({
@@ -37,12 +44,12 @@ const upload = multer({
 
 
 // Authentication
-router.post('/auth/login', loginAdmin)
+router.post('/auth/login', validateLogin, loginAdmin)
 
 // Public routes (Read-only)
 router.get('/pengurus', getPengurus)
 router.get('/berita', getBerita)
-router.get('/berita/:id', getBeritaById)
+router.get('/berita/:id', validateIdParam, getBeritaById)
 router.get('/prestasi', getPrestasi)
 
 // Protected routes (Write access - Requires JWT token)
@@ -58,17 +65,17 @@ router.post('/upload', authenticateToken, (req, res, next) => {
   })
 }, uploadImage)
 
-router.post('/pengurus', authenticateToken, createPengurus)
-router.put('/pengurus/:id', authenticateToken, updatePengurus)
-router.delete('/pengurus/:id', authenticateToken, deletePengurus)
+router.post('/pengurus', authenticateToken, validatePengurus, createPengurus)
+router.put('/pengurus/:id', authenticateToken, validateIdParam, validatePengurus, updatePengurus)
+router.delete('/pengurus/:id', authenticateToken, validateIdParam, deletePengurus)
 
-router.post('/berita', authenticateToken, createBerita)
-router.put('/berita/:id', authenticateToken, updateBerita)
-router.delete('/berita/:id', authenticateToken, deleteBerita)
+router.post('/berita', authenticateToken, validateBerita, createBerita)
+router.put('/berita/:id', authenticateToken, validateIdParam, validateBerita, updateBerita)
+router.delete('/berita/:id', authenticateToken, validateIdParam, deleteBerita)
 
-router.post('/prestasi', authenticateToken, createPrestasi)
-router.put('/prestasi/:id', authenticateToken, updatePrestasi)
-router.delete('/prestasi/:id', authenticateToken, deletePrestasi)
+router.post('/prestasi', authenticateToken, validatePrestasi, createPrestasi)
+router.put('/prestasi/:id', authenticateToken, validateIdParam, validatePrestasi, updatePrestasi)
+router.delete('/prestasi/:id', authenticateToken, validateIdParam, deletePrestasi)
 
 export default router
 

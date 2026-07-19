@@ -1,7 +1,10 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
-dotenv.config()
+if (!process.env.JWT_SECRET) {
+  console.error('CRITICAL ERROR: Missing essential environment variable (JWT_SECRET).')
+  process.exit(1)
+}
 
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
@@ -11,7 +14,7 @@ export const authenticateToken = (req, res, next) => {
     return res.status(401).json({ success: false, message: 'Akses ditolak: Token autentikasi tidak ditemukan.' })
   }
 
-  jwt.verify(token, process.env.JWT_SECRET || 'ikm_itera_secret_token_key_2026', (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
       return res.status(403).json({ success: false, message: 'Akses ditolak: Token tidak valid atau kedaluwarsa.' })
     }

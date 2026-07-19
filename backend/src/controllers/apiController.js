@@ -37,7 +37,7 @@ export const loginAdmin = async (req, res) => {
     // Generate JWT Token
     const token = jwt.sign(
       { id: user.id, username: user.username },
-      process.env.JWT_SECRET || 'ikm_itera_secret_token_key_2026',
+      process.env.JWT_SECRET,
       { expiresIn: '24h' }
     )
 

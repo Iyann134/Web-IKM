@@ -7,7 +7,8 @@ import {
   faChevronDown,
   faBars,
   faXmark,
-  faUsers
+  faLock,
+  faSignInAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 export default function Layout() {
@@ -15,13 +16,15 @@ export default function Layout() {
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false)
   const [mobileTentangOpen, setMobileTentangOpen] = useState(false)
   const location = useLocation()
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('adminToken'))
+  const isLoggedIn = !!localStorage.getItem('adminToken')
 
   useEffect(() => {
-    setIsLoggedIn(!!localStorage.getItem('adminToken'))
-    setMobileDropdownOpen(false)
-    setMobileTentangOpen(false)
-    setMenuOpen(false)
+    const timer = setTimeout(() => {
+      setMobileDropdownOpen(false)
+      setMobileTentangOpen(false)
+      setMenuOpen(false)
+    }, 0)
+    return () => clearTimeout(timer)
   }, [location])
 
   return (

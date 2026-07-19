@@ -12,8 +12,7 @@ import {
   faTrophy,
   faTimes,
   faUser,
-  faBars,
-  faChevronLeft
+  faBars
 } from '@fortawesome/free-solid-svg-icons'
 import {
   fetchPengurus,
@@ -34,8 +33,8 @@ import {
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const [token, setToken] = useState('')
-  const [adminUser, setAdminUser] = useState('')
+  const [token] = useState(() => localStorage.getItem('adminToken') || '')
+  const [adminUser] = useState(() => localStorage.getItem('adminUsername') || '')
   const [activeTab, setActiveTab] = useState('pengurus') // 'pengurus' | 'berita' | 'prestasi'
   
   // Collapse / Drawer States
@@ -69,35 +68,32 @@ export default function Dashboard() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('adminToken')
-    const storedUsername = localStorage.getItem('adminUsername')
-
     if (!storedToken) {
       navigate('/admin/login')
-    } else {
-      setToken(storedToken)
-      setAdminUser(storedUsername || 'Admin')
-      loadData()
+      return
     }
-  }, [navigate])
 
-  const loadData = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const [pData, bData, prData] = await Promise.all([
-        fetchPengurus(),
-        fetchBerita(),
-        fetchPrestasi()
-      ])
-      setPengurusList(pData)
-      setBeritaList(bData)
-      setPrestasiList(prData)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
+    const loadData = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const [pData, bData, prData] = await Promise.all([
+          fetchPengurus(),
+          fetchBerita(),
+          fetchPrestasi()
+        ])
+        setPengurusList(pData)
+        setBeritaList(bData)
+        setPrestasiList(prData)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+
+    loadData()
+  }, [navigate])
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken')
