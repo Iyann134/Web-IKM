@@ -3,8 +3,8 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import helmet from 'helmet'
 import { rateLimit } from 'express-rate-limit'
-import apiRouter from './routes/api.js'
 
+// Load .env file (only needed for local development; Vercel injects env vars automatically)
 dotenv.config()
 
 // Verify essential environment variables at startup
@@ -12,6 +12,9 @@ if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY || !process.env.JWT_S
   console.error('CRITICAL ERROR: Missing essential environment variables (SUPABASE_URL, SUPABASE_KEY, or JWT_SECRET).')
   process.exit(1)
 }
+
+// Import routes AFTER dotenv.config() so all modules see the loaded env vars
+const { default: apiRouter } = await import('./routes/api.js')
 
 const app = express()
 app.set('trust proxy', 1) // trust first proxy for serverless environments (like Vercel)
